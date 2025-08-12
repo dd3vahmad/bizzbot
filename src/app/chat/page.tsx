@@ -9,8 +9,8 @@ const Chat = () => {
   const options = [
     { label: "Business Registration" },
     { label: "Taxes" },
-    { label: "Required Certifications" },
     { label: "Legals" },
+    { label: "Required Certifications" },
   ];
 
   return (
@@ -22,7 +22,7 @@ const Chat = () => {
           <h1 className="text-4xl">{greeting}</h1>
         </div>
 
-        <div className="flex flex-col bg-neutral-700/30 mt-5 w-full overflow-hidden rounded-xl p-1">
+        <div className="flex flex-col bg-neutral-700/30 mt-5 w-full overflow-hidden rounded-xl p-1 max-h-[400px]">
           <Textarea
             rows={1}
             className="w-full outline-none border-none mb-2"
@@ -41,11 +41,11 @@ const Chat = () => {
           </div>
         </div>
 
-        <div className="flex justify-center items-center gap-2 w-full">
+        <div className="flex flex-wrap justify-center items-center gap-2 w-full mt-5">
           {options.map((option, i) => (
             <div
               key={i}
-              className="text-neutral-500 border border-neutral-600 py-1 px-2 mt-5 text-sm font-semibold cursor-pointer rounded"
+              className="text-neutral-500 border border-neutral-600 py-1 px-2 text-sm font-semibold cursor-pointer rounded"
             >
               {option.label}
             </div>

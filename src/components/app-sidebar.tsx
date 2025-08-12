@@ -1,15 +1,4 @@
-import {
-  Calendar,
-  ChevronUp,
-  Home,
-  Inbox,
-  MessageCircle,
-  PlusCircle,
-  Search,
-  Settings,
-  User2,
-} from "lucide-react";
-
+import { ChevronUp, MessageCircle, PlusCircle, User2 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -31,32 +20,26 @@ import {
 import Logo from "./logo";
 import Link from "next/link";
 
-// Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
-    icon: Home,
+    title: "Cake business registration information.",
+    id: 1,
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
+    title: "Car business registration information.",
+    id: 2,
   },
   {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
+    title: "Farming business registration information.",
+    id: 3,
   },
   {
-    title: "Search",
-    url: "#",
-    icon: Search,
+    title: "FINTECH componey launch procedures in Nigeria",
+    id: 4,
   },
   {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Taxes related to FINTECH companies",
+    id: 5,
   },
 ];
 
@@ -70,14 +53,20 @@ export function AppSidebar() {
         </div>
 
         <div className="flex flex-col gap-y-1 mt-8">
-          <div className="flex items-center gap-x-3 px-2 cursor-pointer hover:bg-neutral-700/50 rounded py-2">
+          <Link
+            href={"/chat"}
+            className="flex items-center gap-x-3 px-2 cursor-pointer hover:bg-neutral-700/50 rounded py-2"
+          >
             <PlusCircle size={20} className="text-amber-600" />
             <h1 className="font-semibold text-neutral-300">New Chat</h1>
-          </div>
-          <div className="flex items-center gap-x-3 px-2 cursor-pointer hover:bg-neutral-700/50 rounded py-2">
+          </Link>
+          <Link
+            href={"/chat/all"}
+            className="flex items-center gap-x-3 px-2 cursor-pointer hover:bg-neutral-700/50 rounded py-2"
+          >
             <MessageCircle size={20} className="text-amber-600" />
             <h1 className="font-semibold text-neutral-300">All Chats</h1>
-          </div>
+          </Link>
         </div>
       </SidebarHeader>
 
@@ -94,8 +83,7 @@ export function AppSidebar() {
                     asChild
                     className="hover:bg-neutral-700/50 hover:text-neutral-300"
                   >
-                    <Link href={item.url}>
-                      <item.icon />
+                    <Link href={`/chat/${item.id}`}>
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
