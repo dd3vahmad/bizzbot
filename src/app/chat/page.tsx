@@ -21,7 +21,6 @@ const Chat = () => {
           <h1 className="text-4xl">{greeting}</h1>
         </div>
 
-        {/* Input Box */}
         <div className="flex flex-col bg-neutral-700/30 mt-5 w-full overflow-hidden rounded-xl p-1 max-w-[400px]">
           <Textarea
             rows={1}
@@ -41,7 +40,6 @@ const Chat = () => {
           </div>
         </div>
 
-        {/* Starting Options */}
         <div className="flex justify-center items-center gap-2 w-full">
           {options.map((option, i) => (
             <div
