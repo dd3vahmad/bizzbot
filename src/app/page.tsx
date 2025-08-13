@@ -460,7 +460,7 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4">
+      <footer className="bg-neutral-900 text-white py-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
@@ -505,7 +505,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+          <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-gray-400">
             <p>
               &copy; 2025 NaijaBiz AI. Built with ❤️ for Nigerian entrepreneurs.
             </p>
