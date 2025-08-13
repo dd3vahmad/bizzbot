@@ -61,7 +61,7 @@ export default function HomePage() {
                   Login
                 </Button>
               </Link>
-              <Link href="/sign-up">
+              <Link href="/chat">
                 <Button className="bg-amber-600 cursor-pointer hover:bg-amber-500 text-white">
                   Try Now
                 </Button>
