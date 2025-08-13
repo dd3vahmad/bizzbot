@@ -15,6 +15,8 @@ import {
   Building,
 } from "lucide-react";
 import Link from "next/link";
+import Logo from "@/components/logo";
+import { app } from "@/lib/constants";
 
 export default function HomePage() {
   return (
@@ -22,12 +24,10 @@ export default function HomePage() {
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center">
-              <Bot className="w-5 h-5 text-white" />
-            </div>
+          <div className="flex items-center">
+            <Logo size="xxs" />
             <span className="font-heading font-bold text-xl text-gray-900">
-              NaijaBizBot
+              BizzBot
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-6">
@@ -80,13 +80,13 @@ export default function HomePage() {
                 <MessageCircle className="ml-2 w-5 h-5 group-hover:scale-110 transition-transform" />
               </Link>
             </Button>
-            {/* <Button
+            <Button
               variant="outline"
               size="lg"
               className="border-amber-600 text-amber-600 hover:bg-amber-50 px-8 py-4 text-lg bg-transparent"
             >
               Watch Demo
-            </Button> */}
+            </Button>
           </div>
 
           {/* Hero Image/Mockup */}
@@ -99,7 +99,7 @@ export default function HomePage() {
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                 </div>
                 <span className="text-sm text-gray-600 font-medium">
-                  NaijaBiz AI Assistant
+                  BizzBot
                 </span>
               </div>
               <div className="p-6 space-y-4">
@@ -111,9 +111,9 @@ export default function HomePage() {
                 <div className="flex justify-start">
                   <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-2xl rounded-tl-sm max-w-md">
                     <div className="flex items-center gap-2 mb-2">
-                      <Bot className="w-4 h-4 text-amber-600" />
+                      <Logo size="xxs" />
                       <span className="font-semibold text-amber-600">
-                        NaijaBiz AI
+                        BizzBot
                       </span>
                     </div>
                     To register your business in Lagos State, you&apos;ll need
@@ -134,7 +134,7 @@ export default function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl md:text-5xl text-gray-900 mb-4">
-              Why Choose NaijaBiz AI?
+              Why Choose BizzBot?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Designed specifically for Nigerian entrepreneurs, with deep
@@ -441,12 +441,10 @@ export default function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
+              <div className="flex items-center mb-4">
+                <Logo size="xxs" />
                 <span className="font-heading font-bold text-xl">
-                  NaijaBizBot AI
+                  {app.name}
                 </span>
               </div>
               <p className="text-gray-400 leading-relaxed">

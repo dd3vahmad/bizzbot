@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { app } from "@/lib/constants";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: '9jaBizBot - Your Business AI Assistant',
-  description: 'Get instant AI-powered answers to your business registration, tax, and trade questions in Nigeria. 24/7 support for Nigerian entrepreneurs.',
+  title: `${app.name} - ${app.tagline}`,
+  description: app.description,
 };
 
 export default function RootLayout({
