@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  MessageCircle,
   Clock,
   Target,
   Users,
@@ -50,7 +49,7 @@ export default function HomePage() {
               Reviews
             </a>
           </nav>
-          <Button className="bg-amber-600 hover:bg-amber-500 text-white">
+          <Button className="bg-amber-600 cursor-pointer hover:bg-amber-500 text-white">
             <Link href="/chat">Try Now</Link>
           </Button>
         </div>
@@ -75,15 +74,18 @@ export default function HomePage() {
               size="lg"
               className="bg-amber-600 hover:bg-amber-500 text-white px-8 py-4 text-lg font-semibold group"
             >
-              <Link href="/chat" className="flex items-center">
-                Start Chatting Now
-                <MessageCircle className="ml-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+              <Link href="/chat" className="flex items-center gap-2">
+                Talk to {app.name}
+                <Logo
+                  size="xxs"
+                  className="ml-2 w-5 h-5 group-hover:scale-110 transition-transform"
+                />
               </Link>
             </Button>
             <Button
               variant="outline"
               size="lg"
-              className="border-amber-600 text-amber-600 hover:bg-amber-50 px-8 py-4 text-lg bg-transparent"
+              className="border-amber-600 text-amber-600 cursor-pointer hover:text-amber-600 hover:bg-amber-50 px-8 py-4 text-lg bg-transparent"
             >
               Watch Demo
             </Button>
