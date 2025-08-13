@@ -16,7 +16,7 @@ const ViewChatLayout = ({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarTrigger className="hover:bg-transparent hover:text-neutral-300 cursor-pointer" />
+      <SidebarTrigger className="hover:bg-transparent hover:text-neutral-300 cursor-pointer my-2 mx-1" />
       <main className="min-h-screen w-full flex items-center justify-center">
         {children}
       </main>
