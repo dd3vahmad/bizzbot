@@ -18,8 +18,11 @@ import Link from "next/link";
 import Logo from "@/components/logo";
 import { app } from "@/lib/constants";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { cac_headlines_docs } from "@/lib/cheerio";
 
-export default function HomePage() {
+export default async function HomePage() {
+  console.log("CAC News Headlines: ", cac_headlines_docs);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
       {/* Header */}
