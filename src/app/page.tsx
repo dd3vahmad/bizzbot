@@ -27,7 +27,7 @@ export default function HomePage() {
           <div className="flex items-center">
             <Logo size="xxs" />
             <span className="font-heading font-bold text-xl text-gray-900">
-              BizzBot
+              {app.name}
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-6">
@@ -99,7 +99,7 @@ export default function HomePage() {
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                 </div>
                 <span className="text-sm text-gray-600 font-medium">
-                  BizzBot
+                  {app.name}
                 </span>
               </div>
               <div className="p-6 space-y-4">
@@ -113,7 +113,7 @@ export default function HomePage() {
                     <div className="flex items-center gap-2 mb-2">
                       <Logo size="xxs" />
                       <span className="font-semibold text-amber-600">
-                        BizzBot
+                        {app.name}
                       </span>
                     </div>
                     To register your business in Lagos State, you&apos;ll need
@@ -134,7 +134,7 @@ export default function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl md:text-5xl text-gray-900 mb-4">
-              Why Choose BizzBot?
+              Why Choose {app.name}?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Designed specifically for Nigerian entrepreneurs, with deep
@@ -421,7 +421,7 @@ export default function HomePage() {
             Join thousands of Nigerian entrepreneurs who trust NaijaBiz AI for
             their business guidance.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col gap-4 justify-center items-center">
             <Button
               size="lg"
               className="bg-white text-amber-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold group"

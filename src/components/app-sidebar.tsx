@@ -19,6 +19,7 @@ import {
 } from "./ui/dropdown-menu";
 import Logo from "./logo";
 import Link from "next/link";
+import { app } from "@/lib/constants";
 
 const items = [
   {
@@ -49,7 +50,9 @@ export function AppSidebar() {
       <SidebarHeader className="bg-neutral-800 w-full">
         <div className="flex items-center gap-x-2">
           <Logo size="xxs" />
-          <h1 className="text-2xl font-semibold text-neutral-300">BizzBot</h1>
+          <h1 className="text-2xl font-semibold text-neutral-300">
+            {app.name}
+          </h1>
         </div>
 
         <div className="flex flex-col gap-y-1 mt-8">
