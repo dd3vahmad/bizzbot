@@ -51,11 +51,23 @@ export default function HomePage() {
             </Link>
           </nav>
 
-          <SignedOut>
-            <Button className="bg-amber-600 cursor-pointer hover:bg-amber-500 text-white">
-              <Link href="/chat">Try Now</Link>
-            </Button>
-          </SignedOut>
+          <div className="flex items-center gap-x-2 w-fit">
+            <SignedOut>
+              <Link href="/sign-in">
+                <Button
+                  variant={"outline"}
+                  className="border border-amber-600 cursor-pointer hover:border-amber-500 hover:text-amber-600 text-amber-600"
+                >
+                  Login
+                </Button>
+              </Link>
+              <Link href="/sign-up">
+                <Button className="bg-amber-600 cursor-pointer hover:bg-amber-500 text-white">
+                  Try Now
+                </Button>
+              </Link>
+            </SignedOut>
+          </div>
         </div>
       </header>
 
@@ -218,7 +230,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <FileText className="w-12 h-12 text-amber-600 mx-auto mb-4" />
               </div>
-              <h3 className="font-heading font-bold text-xl mb-4">
+              <h3 className="text-neutral-800 font-bold text-xl mb-4">
                 Ask Your Question
               </h3>
               <p className="text-gray-600">
@@ -234,7 +246,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <Bot className="w-12 h-12 text-amber-600 mx-auto mb-4" />
               </div>
-              <h3 className="font-heading font-bold text-xl mb-4">
+              <h3 className="text-neutral-800 font-bold text-xl mb-4">
                 AI Processes
               </h3>
               <p className="text-gray-600">
@@ -250,7 +262,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <CheckCircle className="w-12 h-12 text-amber-600 mx-auto mb-4" />
               </div>
-              <h3 className="font-heading font-bold text-xl mb-4">
+              <h3 className="text-neutral-800 font-bold text-xl mb-4">
                 Get Clear Answers
               </h3>
               <p className="text-gray-600">
