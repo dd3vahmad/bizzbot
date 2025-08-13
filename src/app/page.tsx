@@ -12,11 +12,12 @@ import {
   FileText,
   Calculator,
   Building,
+  Play,
 } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/logo";
 import { app } from "@/lib/constants";
-import { SignedOut } from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function HomePage() {
   return (
@@ -52,6 +53,9 @@ export default function HomePage() {
           </nav>
 
           <div className="flex items-center gap-x-2 w-fit">
+            <SignedIn>
+              <UserButton signInUrl="/sign-in" />
+            </SignedIn>
             <SignedOut>
               <Link href="/sign-in">
                 <Button
@@ -103,6 +107,7 @@ export default function HomePage() {
               size="lg"
               className="border-amber-600 text-amber-600 cursor-pointer hover:text-amber-600 hover:bg-amber-50 px-8 py-4 text-lg bg-transparent"
             >
+              <Play />
               Watch Demo
             </Button>
           </div>
