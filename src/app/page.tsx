@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import Logo from "@/components/logo";
 import { app } from "@/lib/constants";
+import { SignedOut } from "@clerk/nextjs";
 
 export default function HomePage() {
   return (
@@ -30,28 +31,31 @@ export default function HomePage() {
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-6">
-            <a
+            <Link
               href="#features"
               className="text-gray-600 hover:text-amber-600 transition-colors"
             >
               Features
-            </a>
-            <a
+            </Link>
+            <Link
               href="#how-it-works"
               className="text-gray-600 hover:text-amber-600 transition-colors"
             >
               How It Works
-            </a>
-            <a
+            </Link>
+            <Link
               href="#testimonials"
               className="text-gray-600 hover:text-amber-600 transition-colors"
             >
               Reviews
-            </a>
+            </Link>
           </nav>
-          <Button className="bg-amber-600 cursor-pointer hover:bg-amber-500 text-white">
-            <Link href="/chat">Try Now</Link>
-          </Button>
+
+          <SignedOut>
+            <Button className="bg-amber-600 cursor-pointer hover:bg-amber-500 text-white">
+              <Link href="/chat">Try Now</Link>
+            </Button>
+          </SignedOut>
         </div>
       </header>
 
