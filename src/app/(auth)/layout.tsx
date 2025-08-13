@@ -16,7 +16,6 @@ export default function RootLayout({
             <h1 className="text-4xl font-semibold">{app.name}</h1>
           </div>
 
-          {/* Features List */}
           <div className="flex flex-col gap-y-6">
             <FeatureItem
               icon={<Clock size={16} className="text-amber-600" />}
