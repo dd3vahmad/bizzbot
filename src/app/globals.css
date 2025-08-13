@@ -114,8 +114,40 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Added custom utility classes for the design */
+@layer utilities {
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .text-emerald-600 {
+    color: #059669;
+  }
+
+  .text-emerald-500 {
+    color: #10b981;
+  }
+
+  .bg-emerald-600 {
+    background-color: #059669;
+  }
+
+  .bg-emerald-500 {
+    background-color: #10b981;
+  }
+
+  .hover\:bg-emerald-500:hover {
+    background-color: #10b981;
+  }
+
+  .border-emerald-600 {
+    border-color: #059669;
   }
 }
