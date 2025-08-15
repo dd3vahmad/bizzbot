@@ -125,11 +125,8 @@ export default async function HomePage() {
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                 </div>
                 <span className="text-sm text-gray-600 font-medium">
-<<<<<<< HEAD
                   NaijaBizBot  Assistant
-=======
                   {app.name}
->>>>>>> d1744325da74c5c33d7e7cf1d0a472d62d0ab3b3
                 </span>
               </div>
               <div className="p-6 space-y-4">
@@ -143,11 +140,8 @@ export default async function HomePage() {
                     <div className="flex items-center gap-2 mb-2">
                       <Logo size="xxs" />
                       <span className="font-semibold text-amber-600">
-<<<<<<< HEAD
                         NaijaBizBot 
-=======
                         {app.name}
->>>>>>> d1744325da74c5c33d7e7cf1d0a472d62d0ab3b3
                       </span>
                     </div>
                     To register your business in Lagos State, you&apos;ll need
@@ -168,11 +162,8 @@ export default async function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl md:text-5xl text-gray-900 mb-4">
-<<<<<<< HEAD
               Why Choose NaijaBizBot ?
-=======
               Why Choose {app.name}?
->>>>>>> d1744325da74c5c33d7e7cf1d0a472d62d0ab3b3
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Designed specifically for Nigerian entrepreneurs, with deep
@@ -482,11 +473,8 @@ export default async function HomePage() {
               <div className="flex items-center mb-4">
                 <Logo size="xxs" />
                 <span className="font-heading font-bold text-xl">
-<<<<<<< HEAD
                   NaijaBizBot 
-=======
                   {app.name}
->>>>>>> d1744325da74c5c33d7e7cf1d0a472d62d0ab3b3
                 </span>
               </div>
               <p className="text-gray-400 leading-relaxed">
