@@ -99,7 +99,7 @@ export default function HomePage() {
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                 </div>
                 <span className="text-sm text-gray-600 font-medium">
-                  NaijaBiz AI Assistant
+                  NaijaBizBot  Assistant
                 </span>
               </div>
               <div className="p-6 space-y-4">
@@ -113,7 +113,7 @@ export default function HomePage() {
                     <div className="flex items-center gap-2 mb-2">
                       <Bot className="w-4 h-4 text-amber-600" />
                       <span className="font-semibold text-amber-600">
-                        NaijaBiz AI
+                        NaijaBizBot 
                       </span>
                     </div>
                     To register your business in Lagos State, you&apos;ll need
@@ -134,7 +134,7 @@ export default function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl md:text-5xl text-gray-900 mb-4">
-              Why Choose NaijaBiz AI?
+              Why Choose NaijaBizBot ?
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Designed specifically for Nigerian entrepreneurs, with deep
@@ -327,7 +327,7 @@ export default function HomePage() {
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Hear from fellow business owners who&apos;ve streamlined their
-              processes with NaijaBiz AI.
+              processes with NaijaBizBot .
             </p>
           </div>
 
@@ -342,7 +342,7 @@ export default function HomePage() {
                 ))}
               </div>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                &quot;NaijaBizBot AI saved me weeks of research. I got my
+                &quot;NaijaBizBot  saved me weeks of research. I got my
                 business registered in Lagos within days instead of
                 months!&quot;
               </p>
@@ -418,7 +418,7 @@ export default function HomePage() {
             Ready to Simplify Your Business Journey?
           </h2>
           <p className="text-xl text-amber-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of Nigerian entrepreneurs who trust NaijaBiz AI for
+            Join thousands of Nigerian entrepreneurs who trust NaijaBizBot  for
             their business guidance.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -446,7 +446,7 @@ export default function HomePage() {
                   <Bot className="w-5 h-5 text-white" />
                 </div>
                 <span className="font-heading font-bold text-xl">
-                  NaijaBizBot AI
+                  NaijaBizBot 
                 </span>
               </div>
               <p className="text-gray-400 leading-relaxed">
@@ -486,7 +486,7 @@ export default function HomePage() {
 
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
             <p>
-              &copy; 2025 NaijaBiz AI. Built with ❤️ for Nigerian entrepreneurs.
+              &copy; 2025 NaijaBizBot . Built with ❤️ for Nigerian entrepreneurs.
             </p>
           </div>
         </div>
