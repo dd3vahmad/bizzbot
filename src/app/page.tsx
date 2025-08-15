@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
-  MessageCircle,
   Clock,
   Target,
   Users,
@@ -13,46 +12,69 @@ import {
   FileText,
   Calculator,
   Building,
+  Play,
 } from "lucide-react";
 import Link from "next/link";
+import Logo from "@/components/logo";
+import { app } from "@/lib/constants";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { cac_headlines_docs } from "@/lib/cheerio";
 
-export default function HomePage() {
+export default async function HomePage() {
+  console.log("CAC News Headlines: ", cac_headlines_docs);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center">
-              <Bot className="w-5 h-5 text-white" />
-            </div>
+          <div className="flex items-center">
+            <Logo size="xxs" />
             <span className="font-heading font-bold text-xl text-gray-900">
-              NaijaBizBot
+              {app.name}
             </span>
           </div>
           <nav className="hidden md:flex items-center gap-6">
-            <a
+            <Link
               href="#features"
               className="text-gray-600 hover:text-amber-600 transition-colors"
             >
               Features
-            </a>
-            <a
+            </Link>
+            <Link
               href="#how-it-works"
               className="text-gray-600 hover:text-amber-600 transition-colors"
             >
               How It Works
-            </a>
-            <a
+            </Link>
+            <Link
               href="#testimonials"
               className="text-gray-600 hover:text-amber-600 transition-colors"
             >
               Reviews
-            </a>
+            </Link>
           </nav>
-          <Button className="bg-amber-600 hover:bg-amber-500 text-white">
-            <Link href="/chat">Try Now</Link>
-          </Button>
+
+          <div className="flex items-center gap-x-2 w-fit">
+            <SignedIn>
+              <UserButton signInUrl="/sign-in" />
+            </SignedIn>
+            <SignedOut>
+              <Link href="/sign-in">
+                <Button
+                  variant={"outline"}
+                  className="border border-amber-600 cursor-pointer hover:border-amber-500 hover:text-amber-600 text-amber-600"
+                >
+                  Login
+                </Button>
+              </Link>
+              <Link href="/chat">
+                <Button className="bg-amber-600 cursor-pointer hover:bg-amber-500 text-white">
+                  Try Now
+                </Button>
+              </Link>
+            </SignedOut>
+          </div>
         </div>
       </header>
 
@@ -75,18 +97,22 @@ export default function HomePage() {
               size="lg"
               className="bg-amber-600 hover:bg-amber-500 text-white px-8 py-4 text-lg font-semibold group"
             >
-              <Link href="/chat" className="flex items-center">
-                Start Chatting Now
-                <MessageCircle className="ml-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+              <Link href="/chat" className="flex items-center gap-2">
+                Talk to {app.name}
+                <Logo
+                  size="xxs"
+                  className="ml-2 w-5 h-5 group-hover:scale-110 transition-transform"
+                />
               </Link>
             </Button>
-            {/* <Button
+            <Button
               variant="outline"
               size="lg"
-              className="border-amber-600 text-amber-600 hover:bg-amber-50 px-8 py-4 text-lg bg-transparent"
+              className="border-amber-600 text-amber-600 cursor-pointer hover:text-amber-600 hover:bg-amber-50 px-8 py-4 text-lg bg-transparent"
             >
+              <Play />
               Watch Demo
-            </Button> */}
+            </Button>
           </div>
 
           {/* Hero Image/Mockup */}
@@ -99,7 +125,11 @@ export default function HomePage() {
                   <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                 </div>
                 <span className="text-sm text-gray-600 font-medium">
+<<<<<<< HEAD
                   NaijaBizBot  Assistant
+=======
+                  {app.name}
+>>>>>>> d1744325da74c5c33d7e7cf1d0a472d62d0ab3b3
                 </span>
               </div>
               <div className="p-6 space-y-4">
@@ -111,9 +141,13 @@ export default function HomePage() {
                 <div className="flex justify-start">
                   <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-2xl rounded-tl-sm max-w-md">
                     <div className="flex items-center gap-2 mb-2">
-                      <Bot className="w-4 h-4 text-amber-600" />
+                      <Logo size="xxs" />
                       <span className="font-semibold text-amber-600">
+<<<<<<< HEAD
                         NaijaBizBot 
+=======
+                        {app.name}
+>>>>>>> d1744325da74c5c33d7e7cf1d0a472d62d0ab3b3
                       </span>
                     </div>
                     To register your business in Lagos State, you&apos;ll need
@@ -134,7 +168,11 @@ export default function HomePage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
             <h2 className="font-heading font-bold text-3xl md:text-5xl text-gray-900 mb-4">
+<<<<<<< HEAD
               Why Choose NaijaBizBot ?
+=======
+              Why Choose {app.name}?
+>>>>>>> d1744325da74c5c33d7e7cf1d0a472d62d0ab3b3
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Designed specifically for Nigerian entrepreneurs, with deep
@@ -212,7 +250,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <FileText className="w-12 h-12 text-amber-600 mx-auto mb-4" />
               </div>
-              <h3 className="font-heading font-bold text-xl mb-4">
+              <h3 className="text-neutral-800 font-bold text-xl mb-4">
                 Ask Your Question
               </h3>
               <p className="text-gray-600">
@@ -228,7 +266,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <Bot className="w-12 h-12 text-amber-600 mx-auto mb-4" />
               </div>
-              <h3 className="font-heading font-bold text-xl mb-4">
+              <h3 className="text-neutral-800 font-bold text-xl mb-4">
                 AI Processes
               </h3>
               <p className="text-gray-600">
@@ -244,7 +282,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <CheckCircle className="w-12 h-12 text-amber-600 mx-auto mb-4" />
               </div>
-              <h3 className="font-heading font-bold text-xl mb-4">
+              <h3 className="text-neutral-800 font-bold text-xl mb-4">
                 Get Clear Answers
               </h3>
               <p className="text-gray-600">
@@ -421,7 +459,7 @@ export default function HomePage() {
             Join thousands of Nigerian entrepreneurs who trust NaijaBizBot  for
             their business guidance.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col gap-4 justify-center items-center">
             <Button
               size="lg"
               className="bg-white text-amber-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold group"
@@ -437,16 +475,18 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12 px-4">
+      <footer className="bg-neutral-900 text-white py-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-amber-600 rounded-lg flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
+              <div className="flex items-center mb-4">
+                <Logo size="xxs" />
                 <span className="font-heading font-bold text-xl">
+<<<<<<< HEAD
                   NaijaBizBot 
+=======
+                  {app.name}
+>>>>>>> d1744325da74c5c33d7e7cf1d0a472d62d0ab3b3
                 </span>
               </div>
               <p className="text-gray-400 leading-relaxed">
@@ -484,7 +524,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+          <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-gray-400">
             <p>
               &copy; 2025 NaijaBizBot . Built with ❤️ for Nigerian entrepreneurs.
             </p>
