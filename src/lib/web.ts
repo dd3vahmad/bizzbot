@@ -51,7 +51,7 @@ const secUrls = [
   // add more SEC URLs here
 ];
 
-// CAC News (dynamic, multiple pages)
+// CAC News (static, multiple pages)
 const cacNewsPages = Array.from(
   { length: 4 },
   (_, i) => `https://www.cac.gov.ng/news/page/${i + 1}`
@@ -76,13 +76,14 @@ export async function ingestData() {
   console.log("Scraping SEC (static)...");
   const secDocs = await scrapeStatic(secUrls, "section");
 
-  console.log("Scraping CAC News (dynamic)...");
-  const cacDocs = await scrapeDynamic(cacNewsPages, "article");
+  console.log("Scraping CAC News (static)...");
+  const cacDocs = await scrapeStatic(cacNewsPages, "article");
 
-  console.log("Scraping FIRS (dynamic)...");
-  const firsDocs = await scrapeDynamic(firsUrls, "main");
+  // console.log("Scraping FIRS (dynamic)...");
+  // const firsDocs = await scrapeDynamic(firsUrls, "main");
 
-  const allDocs = [...secDocs, ...cacDocs, ...firsDocs];
+  // const allDocs = [...secDocs, ...cacDocs, ...firsDocs];
+  const allDocs = [...secDocs, ...cacDocs];
   console.log(`Scraped ${allDocs.length} documents`);
 
   /** ---------- CHUNKING ---------- **/
