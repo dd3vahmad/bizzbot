@@ -1,15 +1,20 @@
+import fs from "fs";
 import { FaissStore } from "@langchain/community/vectorstores/faiss";
-// import { OpenAIEmbeddings } from "@langchain/openai";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
-
-// const embeddings = new OpenAIEmbeddings({
-//   model: "text-embedding-3-small",
-// });
 
 const embeddings = new GoogleGenerativeAIEmbeddings({
   model: "models/gemini-embedding-001",
+  apiKey: process.env.GOOGLE_API_KEY, // Assume set in env
 });
 
-const store = new FaissStore(embeddings, {});
+const directory = "./faiss_index";
 
-export default store;
+export async function getVectorStore() {
+  if (fs.existsSync(directory)) {
+    return await FaissStore.load(directory, embeddings);
+  } else {
+    const store = await FaissStore.fromTexts([], [], embeddings);
+    await store.save(directory);
+    return store;
+  }
+}

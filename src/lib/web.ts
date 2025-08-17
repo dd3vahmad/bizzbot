@@ -7,8 +7,11 @@ import {
   PlaywrightWebBaseLoaderOptions,
 } from "@langchain/community/document_loaders/web/playwright";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import store from "./faiss";
+import { getVectorStore } from "./faiss";
 import { SelectorType } from "cheerio";
+import { useSupabase } from "./supabase";
+
+const supabase = useSupabase();
 
 /** ---------- HELPERS ---------- **/
 const cheerio = (webPath: string, params?: CheerioWebBaseLoaderParams) =>
@@ -73,6 +76,19 @@ const firsUrls = [
 
 // Run scrapers
 export async function ingestData() {
+  const store = await getVectorStore();
+
+  // Delete old web data if exists
+  const { data: existing } = await supabase
+    .from("embedded_documents")
+    .select("chunk_ids")
+    .eq("file_name", "web_data")
+    .single();
+
+  if (existing && existing.chunk_ids.length > 0) {
+    await store.delete(existing.chunk_ids);
+  }
+
   console.log("Scraping SEC (static)...");
   const secDocs = await scrapeStatic(secUrls, "section");
 
@@ -93,14 +109,35 @@ export async function ingestData() {
   });
   const splitDocs = await splitter.splitDocuments(allDocs);
 
+  // Set source to 'web_data' for all
+  splitDocs.forEach((doc) => {
+    doc.metadata.source = "web_data";
+  });
+
+  // Get old keys
+  const oldKeys = new Set(Object.keys((store as any).docstore._dict));
+
   /** ---------- STORE IN FAISS ---------- **/
   console.log("Saving to FAISS...");
   await store.addDocuments(splitDocs);
+
+  // Get new ids
+  const allKeys = Object.keys((store as any).docstore._dict);
+  const newIds = allKeys.filter((k) => !oldKeys.has(k));
+
+  await store.save("./faiss_index");
+
+  // Upsert metadata
+  await supabase.from("embedded_documents").upsert({
+    file_name: "web_data",
+    uploaded_at: new Date().toISOString(),
+    chunk_ids: newIds,
+  });
 
   console.log(`Data ingestion complete. FAISS index saved`);
 }
 
 // Run when file executed directly
-// if (require.main === module) {
-//   ingestData().catch(console.error);
-// }
+if (require.main === module) {
+  ingestData().catch(console.error);
+}
