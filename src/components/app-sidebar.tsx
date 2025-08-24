@@ -105,8 +105,8 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="bg-neutral-800 text-neutral-300 w-full">
-        <SidebarMenu className="bg-neutral-600 w-full flex items-center justify-between px-0 py-2 rounded-md">
-          <div className="flex items-center gap-3">
+        <SidebarMenu className="bg-neutral-700 w-full flex items-center justify-between px-0 py-2 rounded-md">
+          <div className="flex items-center px-2 gap-3 w-full">
             <UserButton
               appearance={{
                 elements: {
