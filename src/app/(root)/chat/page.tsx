@@ -16,12 +16,20 @@ import {
   X,
   SendHorizonal,
   CircleDashed,
+  Mic,
+  StopCircle,
 } from "lucide-react";
 import { useAuth, UserButton } from "@clerk/nextjs";
 import { getGreeting } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { app } from "@/lib/constants";
+
+const SpeechRecognition =
+  typeof window !== "undefined"
+    ? (window as any).webkitSpeechRecognition ||
+      (window as any).SpeechRecognition
+    : null;
 
 const Home = () => {
   const { userId } = useAuth();
@@ -30,13 +38,56 @@ const Home = () => {
   const [isSending, setIsSending] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const recognitionRef = useRef<typeof SpeechRecognition | null>(null);
+
+  const startRecognition = () => {
+    if (!SpeechRecognition) {
+      toast.error("Speech recognition not supported in this browser.");
+      return;
+    }
+
+    const recognition: typeof SpeechRecognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+    recognition.lang = "en-US";
+    recognition.continuous = true;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => setIsRecording(true);
+    recognition.onerror = () => {
+      toast.error("Speech recognition error");
+      setIsRecording(false);
+    };
+    recognition.onend = () => {
+      setIsRecording(false);
+      recognitionRef.current = null;
+    };
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[event.results.length - 1][0].transcript;
+      setPrompt(transcript);
+    };
+
+    recognition.start();
+  };
+
+  const stopRecognition = () => {
+    recognitionRef.current?.stop();
+  };
+
+  const handleMicClick = () => {
+    if (isRecording) {
+      stopRecognition();
+    } else {
+      startRecognition();
+    }
+  };
 
   const handleSubmit = async (
     e: FormEvent<HTMLFormElement> | KeyboardEvent
   ) => {
     e.preventDefault?.();
 
-    // stopRecognition();
+    stopRecognition();
     if (!prompt.trim()) return;
 
     try {
@@ -96,7 +147,7 @@ const Home = () => {
     {
       icon: Calculator,
       label: "Tax Questions",
-      query: "What's Tax structure in Nigeria?",
+      query: "What's the tax structure in Nigeria?",
     },
     {
       icon: FileText,
@@ -197,17 +248,33 @@ const Home = () => {
                 />
               </div>
 
-              <Button
-                className="hover:opacity-80 py-2 px-4 text-white flex items-center gap-2 rounded cursor-pointer font-semibold transition-opacity bg-amber-600 hover:bg-amber-700"
-                type="submit"
-                disabled={!prompt.trim() || isSending}
-              >
-                {isSending ? (
-                  <CircleDashed className="animate-spin" />
+              <div className="flex items-center gap-2">
+                {isRecording ? (
+                  <StopCircle
+                    size={20}
+                    onClick={stopRecognition}
+                    className="text-neutral-300 animate-pulse mx-2"
+                  />
                 ) : (
-                  <SendHorizonal size={20} />
+                  <Mic
+                    size={20}
+                    onClick={handleMicClick}
+                    className="mx-2 cursor-pointer text-neutral-300"
+                  />
                 )}
-              </Button>
+
+                <Button
+                  className="hover:opacity-80 py-2 px-4 text-white flex items-center gap-2 rounded cursor-pointer bg-amber-600 hover:bg-amber-700"
+                  type="submit"
+                  disabled={!prompt.trim() || isSending}
+                >
+                  {isSending ? (
+                    <CircleDashed className="animate-spin" />
+                  ) : (
+                    <SendHorizonal size={20} />
+                  )}
+                </Button>
+              </div>
             </div>
           </form>
 
