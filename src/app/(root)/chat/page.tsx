@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import Logo from "@/components/logo";
 import {
-  Send,
   FileText,
   Calculator,
   Building,
@@ -15,21 +14,59 @@ import {
   ImageIcon,
   Paperclip,
   X,
+  SendHorizonal,
+  CircleDashed,
 } from "lucide-react";
-import { UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton } from "@clerk/nextjs";
 import { getGreeting } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { app } from "@/lib/constants";
 
 const Home = () => {
-  const [inputValue, setInputValue] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const { userId } = useAuth();
+  const router = useRouter();
+  const [prompt, setPrompt] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [attachedFile, setAttachedFile] = useState<File | null>(null);
 
-  const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
+  const handleSubmit = async (
+    e: FormEvent<HTMLFormElement> | KeyboardEvent
+  ) => {
+    e.preventDefault?.();
 
-    setInputValue("");
-    setIsLoading(true);
+    // stopRecognition();
+    if (!prompt.trim()) return;
+
+    try {
+      setIsSending(true);
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: userId, message: prompt }),
+      });
+
+      const { data } = await res.json();
+
+      sessionStorage.setItem("mono_prompt", prompt);
+      setPrompt("");
+
+      router.push(`/chat/${data.id}`);
+      window.location.reload();
+    } catch (error: any) {
+      toast.error(error.message || `Unable to send ${app.name} a message`);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as any);
+    }
   };
 
   const handleFileAttach = () => {
@@ -75,13 +112,13 @@ const Home = () => {
     <div className="w-full h-screen flex flex-col">
       <header className="bg-neutral-800 border-b border-neutral-800 px-4 lg:px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 md:mx-2">
             <h1 className="font-bold text-xl text-neutral-300">BizzBot</h1>
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm hidden md:block text-neutral-400">
               Get instant answers to your business questions.
             </p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 me-6">
             <Badge
               className="text-white border-orange-200"
               style={{ backgroundColor: "#E17100" }}
@@ -110,7 +147,10 @@ const Home = () => {
             </h1>
           </div>
 
-          <div className="flex flex-col bg-neutral-700 mt-5 w-full overflow-hidden rounded-xl p-1">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col bg-neutral-700 mt-5 w-full overflow-hidden rounded-xl p-1"
+          >
             {attachedFile && (
               <div className="flex items-center gap-2 p-2 bg-amber-600/20 border border-amber-600/30 rounded-lg mb-2">
                 <Paperclip className="w-4 h-4 text-amber-600" />
@@ -132,11 +172,9 @@ const Home = () => {
               rows={1}
               className="w-full outline-none border-none mb-2 resize-none bg-transparent text-neutral-300 placeholder:text-neutral-400"
               placeholder="How may I help you today?"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyPress={(e) =>
-                e.key === "Enter" && !e.shiftKey && handleSendMessage()
-              }
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyPress={handleKeyDown}
             />
 
             <div className="w-full flex items-center justify-between px-2 py-2 text-neutral-400">
@@ -161,14 +199,17 @@ const Home = () => {
 
               <Button
                 className="hover:opacity-80 py-2 px-4 text-white flex items-center gap-2 rounded cursor-pointer font-semibold transition-opacity bg-amber-600 hover:bg-amber-700"
-                onClick={handleSendMessage}
-                disabled={!inputValue.trim() || isLoading}
+                type="submit"
+                disabled={!prompt.trim() || isSending}
               >
-                <span>Send</span>
-                <Send size={16} />
+                {isSending ? (
+                  <CircleDashed className="animate-spin" />
+                ) : (
+                  <SendHorizonal size={20} />
+                )}
               </Button>
             </div>
-          </div>
+          </form>
 
           <div className="w-full mt-8">
             <h3 className="text-sm font-semibold text-neutral-400 mb-4 text-center">
@@ -179,7 +220,7 @@ const Home = () => {
                 <Card
                   key={action.label}
                   className="cursor-pointer hover:shadow-md transition-all border-2 hover:border-amber-600/30 hover:bg-amber-600/10 bg-neutral-700 border-neutral-600"
-                  onClick={() => setInputValue(action.query)}
+                  onClick={() => setPrompt(action.query)}
                 >
                   <CardContent className="p-4 text-center">
                     <action.icon className="w-6 h-6 mx-auto mb-2 text-amber-600" />
