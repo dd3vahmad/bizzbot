@@ -1,15 +1,32 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useRef, useEffect } from "react"
-import { Send, Paperclip, X, ArrowLeft, Bot, User } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import Logo from "@/components/logo"
+import { useState, useRef, useEffect } from "react";
+import {
+  Send,
+  Paperclip,
+  X,
+  Bot,
+  User,
+  ChevronLeft,
+  SendHorizonal,
+  StopCircle,
+  Mic,
+  Loader,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import Logo from "@/components/logo";
+import { Message, useChat } from "ai/react";
+import { useAuth } from "@clerk/nextjs";
+import QuickActions, { actions } from "@/components/QuickActions";
+import { app } from "@/lib/constants";
+import { toast } from "sonner";
+import ChatMessage from "@/components/ChatMessage";
 
 const mockChatData = {
   1: {
@@ -19,7 +36,8 @@ const mockChatData = {
       {
         id: 1,
         type: "user",
-        content: "What are the requirements for registering a cake business in Nigeria?",
+        content:
+          "What are the requirements for registering a cake business in Nigeria?",
         timestamp: "10:30 AM",
       },
       {
@@ -120,210 +138,271 @@ const mockChatData = {
       },
     ],
   },
-}
+};
 
-export default function ChatPage() {
-  const params = useParams()
-  const chatId = params.id as string
-  const [message, setMessage] = useState("")
-  const [attachedFiles, setAttachedFiles] = useState<File[]>([])
-  const [messages, setMessages] = useState<any[]>([])
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+const SpeechRecognition =
+  typeof window !== "undefined"
+    ? (window as any).webkitSpeechRecognition ||
+      (window as any).SpeechRecognition
+    : null;
+
+const ViewChat = () => {
+  const params = useParams();
+  const chatId = params.id as string;
+  const { userId } = useAuth();
+  const [title, setTitle] = useState("View Chat");
+  const [message, setMessage] = useState("");
+  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
+  const [chatsLoading, setChatsLoading] = useState(true);
+  const [initialMessages, setInitialMessages] = useState<Message[]>([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const recognitionRef = useRef<typeof SpeechRecognition | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const chatData = mockChatData[chatId as keyof typeof mockChatData] || {
     title: "Chat not found",
     category: "Unknown",
     messages: [],
-  }
+  };
 
-  useEffect(() => {
-    if (chatData.messages.length > 0) {
-      setMessages(chatData.messages)
+  const {
+    input,
+    handleInputChange,
+    handleSubmit,
+    messages,
+    isLoading,
+    append,
+  } = useChat({
+    api: "/api/chat/messages",
+    body: { chatId, user_id: userId },
+    initialMessages,
+  });
+
+  const startRecognition = () => {
+    if (!SpeechRecognition) {
+      toast.error("Speech recognition not supported in this browser.");
+      return;
     }
-  }, [chatId])
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+    const recognition: typeof SpeechRecognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+    recognition.lang = "en-US";
+    recognition.continuous = true;
+    recognition.interimResults = false;
 
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages])
-
-  const handleSend = () => {
-    if (message.trim() || attachedFiles.length > 0) {
-      const newMessage = {
-        id: messages.length + 1,
-        type: "user",
-        content: message,
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+    recognition.onstart = () => setIsRecording(true);
+    recognition.onerror = () => {
+      toast.error("Speech recognition error");
+      setIsRecording(false);
+    };
+    recognition.onend = () => {
+      setIsRecording(false);
+      recognitionRef.current = null;
+    };
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[event.results.length - 1][0].transcript;
+      if (transcript) {
+        handleInputChange({ target: { value: input + transcript } } as any);
       }
+    };
 
-      setMessages((prev) => [...prev, newMessage])
+    recognition.start();
+  };
 
-      // Simulate bot response after a delay
-      setTimeout(() => {
-        const botResponse = {
-          id: messages.length + 2,
-          type: "bot",
-          content:
-            "Thank you for your question! I'm processing your request and will provide you with detailed information about Nigerian business regulations shortly.",
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        }
-        setMessages((prev) => [...prev, botResponse])
-      }, 1000)
+  const stopRecognition = () => {
+    recognitionRef.current?.stop();
+  };
 
-      setMessage("")
-      setAttachedFiles([])
+  const handleMicClick = () => {
+    if (isRecording) {
+      stopRecognition();
+    } else {
+      startRecognition();
     }
-  }
+  };
 
-  const handleFileAttach = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || [])
-    setAttachedFiles((prev) => [...prev, ...files])
-  }
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e as any);
+    }
+  };
 
-  const removeFile = (index: number) => {
-    setAttachedFiles((prev) => prev.filter((_, i) => i !== index))
-  }
+  const fetchMessages = async () => {
+    try {
+      const res = await fetch(`/api/chat/messages/${chatId}`);
+      const { data } = await res.json();
+      setInitialMessages(data.messages);
+      setTitle(data.title);
+    } catch {
+      toast.error("Error fetching chat messages");
+      setInitialMessages([]);
+    } finally {
+      setChatsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const msgContainer = document.getElementById("message-container");
+    if (msgContainer)
+      msgContainer.scrollTo({
+        top: msgContainer.scrollHeight,
+        behavior: "smooth",
+      });
+  }, [messages]);
+
+  useEffect(() => {
+    const bootstrap = async () => {
+      const prompt = sessionStorage.getItem("mono_prompt");
+      if (prompt) {
+        await append(
+          { role: "user", content: prompt, createdAt: new Date() },
+          { body: { chatId } }
+        );
+        sessionStorage.removeItem("mono_prompt");
+      } else {
+        await fetchMessages();
+      }
+    };
+    bootstrap();
+  }, [chatId, append]);
+
+  // const handleFileAttach = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = Array.from(event.target.files || []);
+  //   setAttachedFiles((prev) => [...prev, ...files]);
+  // };
+
+  // const removeFile = (index: number) => {
+  //   setAttachedFiles((prev) => prev.filter((_, i) => i !== index));
+  // };
 
   return (
-    <div className="flex flex-col h-full bg-neutral-900">
+    <div className="flex flex-col min-h-screen w-full">
       {/* Header */}
-      <div className="border-b border-neutral-700/50 bg-neutral-800/50 p-4">
-        <div className="flex items-center gap-3">
-          <Link href="/chats" className="p-2 hover:bg-neutral-700/50 rounded-lg transition-colors">
-            <ArrowLeft className="text-neutral-400 hover:text-[#E17100]" size={20} />
-          </Link>
-          <div className="flex-1 min-w-0">
-            <h1 className="text-lg font-semibold text-neutral-100 line-clamp-1">{chatData.title}</h1>
-            <div className="flex items-center gap-2 mt-1">
-              <Badge variant="secondary" className="bg-[#E17100]/20 text-[#E17100] text-xs">
-                {chatData.category}
-              </Badge>
-              <span className="text-xs text-neutral-400">{messages.length} messages</span>
-            </div>
+      <div className="border-b border-neutral-700/50 bg-neutral-800/50 py-4 px-8 flex items-center justify-between w-full">
+        <div className="flex-1 min-w-0">
+          <h1 className="text-lg font-semibold text-neutral-100 line-clamp-1">
+            {title}
+          </h1>
+          <div className="flex items-center gap-2 mt-1">
+            <Badge
+              variant="secondary"
+              className="bg-amber-600/20 text-amber-600 text-xs"
+            >
+              {chatData.category}
+            </Badge>
+            <span className="text-xs text-neutral-400">
+              {messages.length} messages
+            </span>
           </div>
-          <Button
-            size="sm"
-            className="bg-[#E17100] hover:bg-[#E17100]/90 hidden sm:flex"
-            onClick={() => document.querySelector("textarea")?.focus()}
-          >
-            Continue Chat
-          </Button>
         </div>
+
+        <Button
+          size="sm"
+          className="bg-amber-600 hover:bg-amber-600/90 hidden sm:flex cursor-pointer"
+          onClick={() => document.querySelector("textarea")?.focus()}
+        >
+          Continue Chat
+        </Button>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <Logo size="lg" />
-            <h2 className="text-2xl font-bold text-neutral-100 mt-4 mb-2">Chat not found</h2>
-            <p className="text-neutral-400 mb-6">This chat doesn&apos;t exist or has been deleted.</p>
-            <Link href="/chats">
-              <Button className="bg-[#E17100] hover:bg-[#E17100]/90">Back to All Chats</Button>
-            </Link>
-          </div>
-        ) : (
-          <>
-            {messages.map((msg) => (
-              <div key={msg.id} className={`flex ${msg.type === "user" ? "justify-end" : "justify-start"}`}>
-                <div className={`flex gap-3 max-w-[85%] sm:max-w-[80%]`}>
-                  {msg.type === "bot" && (
-                    <div className="flex-shrink-0 w-8 h-8 bg-[#E17100] rounded-full flex items-center justify-center">
-                      <Bot size={16} className="text-white" />
-                    </div>
-                  )}
-                  <div
-                    className={`p-3 rounded-lg ${
-                      msg.type === "user"
-                        ? "bg-[#E17100] text-white rounded-br-sm"
-                        : "bg-neutral-800 text-neutral-100 border border-neutral-700/50 rounded-bl-sm"
-                    }`}
-                  >
-                    <p className="whitespace-pre-wrap text-sm sm:text-base leading-relaxed">{msg.content}</p>
-                    <span
-                      className={`text-xs mt-2 block ${msg.type === "user" ? "text-orange-100" : "text-neutral-400"}`}
-                    >
-                      {msg.timestamp}
-                    </span>
-                  </div>
-                  {msg.type === "user" && (
-                    <div className="flex-shrink-0 w-8 h-8 bg-neutral-700 rounded-full flex items-center justify-center">
-                      <User size={16} className="text-neutral-300" />
-                    </div>
-                  )}
-                </div>
+      <div
+        hidden={chatsLoading || messages.length > 0}
+        className="min-h-[200px] flex flex-col items-center justify-center mt-24"
+      >
+        <h2 className="text-2xl mb-2">
+          Hi, I&apos;m <span className="font-semibold">{app.name}</span>
+        </h2>
+        <p className="font-semibold text-sm text-neutral-400">
+          How may I help you today?
+        </p>
+      </div>
+
+      <div className="text-sm flex-1 flex flex-col">
+        <div
+          id="message-container"
+          className="w-full flex flex-col overflow-y-auto flex-1 scrollbar-thumb-rounded scrollbar-thumb-blue scrollbar-track-blue-lighter scrollbar-w-2 pb-24 pt-20"
+        >
+          {chatsLoading ? (
+            <div className="flex-1 flex justify-center items-center">
+              <Loader className="animate-spin" />
+            </div>
+          ) : (
+            messages.map((m, i) => (
+              <ChatMessage
+                key={m.id}
+                message={m}
+                isLoading={isLoading}
+                isLastMessage={messages.length - 1 === i}
+              />
+            ))
+          )}
+        </div>
+
+        <div className="border rounded-t-2xl w-full min-h-[100px] fixed bg-neutral-900 bottom-0">
+          <div
+            hidden={!!input || isRecording}
+            className="flex flex-wrap gap-2 text-xs items-center justify-center px-1 py-2"
+          >
+            {actions.map(({ icon: Icon, label }, i) => (
+              <div
+                key={i}
+                className="px-2 py-1 border rounded border-neutral-700 cursor-pointer text-neutral-500 font-semibold flex items-center gap-1"
+              >
+                <Icon /> <h2 className="text-xs">{label}</h2>
               </div>
             ))}
-            <div ref={messagesEndRef} />
-          </>
-        )}
-      </div>
-
-      {/* Input Area */}
-      {messages.length > 0 && (
-        <div className="border-t border-neutral-700/50 bg-neutral-800/50 p-4">
-          {/* Attached Files */}
-          {attachedFiles.length > 0 && (
-            <div className="mb-3 flex flex-wrap gap-2">
-              {attachedFiles.map((file, index) => (
-                <div
-                  key={index}
-                  className="flex items-center gap-2 bg-neutral-700 text-neutral-300 px-3 py-1 rounded-full text-sm"
-                >
-                  <span className="truncate max-w-32">{file.name}</span>
-                  <button onClick={() => removeFile(index)} className="text-neutral-400 hover:text-neutral-200">
-                    <X size={14} />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="flex gap-2">
-            <div className="flex-1 relative">
-              <Textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Continue the conversation about business registration, taxes, or trade..."
-                className="min-h-[50px] max-h-32 bg-neutral-800 border-neutral-600 text-neutral-100 placeholder:text-neutral-400 pr-12 resize-none"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault()
-                    handleSend()
-                  }
-                }}
-              />
-              <button
-              title="input"
-                onClick={() => fileInputRef.current?.click()}
-                className="absolute right-3 top-3 text-neutral-400 hover:text-[#E17100] transition-colors"
-              >
-                <Paperclip size={18} />
-              </button>
-              <input
-              title="Attach files"
-                ref={fileInputRef}
-                type="file"
-                multiple
-                onChange={handleFileAttach}
-                className="hidden"
-                accept="image/*,.pdf,.doc,.docx,.txt"
-              />
-            </div>
-            <Button
-              onClick={handleSend}
-              disabled={!message.trim() && attachedFiles.length === 0}
-              className="bg-[#E17100] hover:bg-[#E17100]/90 disabled:bg-neutral-700 disabled:text-neutral-500 px-4"
-            >
-              <Send size={18} />
-            </Button>
           </div>
+
+          <form
+            onSubmit={handleSubmit}
+            className="w-full flex items-start px-2"
+          >
+            <textarea
+              ref={textareaRef}
+              rows={1}
+              value={input}
+              placeholder="Ask me about your business..."
+              onChange={handleInputChange}
+              onKeyDown={handleInputKeyDown}
+              className="w-full resize-none scrollbar-none overflow-hidden py-3 px-4 placeholder:font-semibold placeholder:text-neutral-700 outline-none flex-1 bg-transparent"
+            />
+
+            <div className="flex items-center py-2">
+              {isRecording ? (
+                <StopCircle
+                  size={20}
+                  onClick={stopRecognition}
+                  className="text-neutral-500 animate-pulse mx-4"
+                />
+              ) : (
+                <Mic
+                  size={20}
+                  onClick={handleMicClick}
+                  className="mx-3 cursor-pointer text-neutral-600"
+                />
+              )}
+
+              <button
+                hidden={isRecording}
+                type="submit"
+                className="mr-3 text-neutral-600 border rounded p-1"
+                disabled={!input.trim() || isLoading}
+              >
+                {isLoading ? (
+                  <span className="text-sm px-2">Sending...</span>
+                ) : (
+                  <SendHorizonal size={20} />
+                )}
+              </button>
+            </div>
+          </form>
         </div>
-      )}
+      </div>
     </div>
-  )
-}
+  );
+};
+
+export default ViewChat;
