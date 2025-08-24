@@ -9,7 +9,7 @@ interface IProp {
   className?: string;
 }
 
-const Logo = ({ size = "5xl" }: IProp) => {
+const Logo = ({ size = "5xl", className }: IProp) => {
   const mf = getSizeMultiplicationFactor(size);
 
   return (
@@ -18,7 +18,7 @@ const Logo = ({ size = "5xl" }: IProp) => {
       height={logo.height * mf}
       width={logo.width * mf}
       alt={app.name}
-      className="cursor-pointer"
+      className={`cursor-pointer ${className}`}
     />
   );
 };

@@ -14,12 +14,13 @@ import {
   Mic,
   StopCircle,
 } from "lucide-react";
-import { useAuth, UserButton } from "@clerk/nextjs";
+import { useAuth, UserButton, useUser } from "@clerk/nextjs";
 import { getGreeting } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { app } from "@/lib/constants";
-import QuickActions from "@/components/QuickActions";
+import QuickActions, { actions } from "@/components/QuickActions";
+import Loading from "@/components/loading";
 
 const SpeechRecognition =
   typeof window !== "undefined"
@@ -29,6 +30,7 @@ const SpeechRecognition =
 
 const Home = () => {
   const { userId } = useAuth();
+  const { user } = useUser();
   const router = useRouter();
   const [prompt, setPrompt] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -134,7 +136,7 @@ const Home = () => {
     }
   };
 
-  const greeting = `${getGreeting()}, Ahmad`;
+  const greeting = `${getGreeting()}, ${user?.firstName}`;
 
   return (
     <div className="w-full h-screen flex flex-col">
@@ -177,8 +179,23 @@ const Home = () => {
 
           <form
             onSubmit={handleSubmit}
-            className="flex flex-col bg-neutral-700 mt-5 w-full overflow-hidden rounded-xl p-1"
+            className="flex flex-col border border-neutral-700 mt-5 w-full overflow-hidden rounded-xl max-w-[580px] px-4 py-2"
           >
+            <div
+              hidden={!!prompt || isRecording}
+              className="flex flex-wrap gap-2 text-xs items-center justify-center px-1 py-2"
+            >
+              {actions.map(({ icon: Icon, label, query }, i) => (
+                <div
+                  key={i}
+                  onClick={() => setPrompt(query)}
+                  className="px-2 py-1 border rounded border-neutral-700 cursor-pointer text-neutral-500 font-semibold flex items-center gap-1"
+                >
+                  <Icon /> <h2 className="text-xs">{label}</h2>
+                </div>
+              ))}
+            </div>
+
             {attachedFile && (
               <div className="flex items-center gap-2 p-2 bg-amber-600/20 border border-amber-600/30 rounded-lg mb-2">
                 <Paperclip className="w-4 h-4 text-amber-600" />
@@ -198,7 +215,7 @@ const Home = () => {
 
             <Textarea
               rows={1}
-              className="w-full outline-none border-none mb-2 resize-none bg-transparent text-neutral-300 placeholder:text-neutral-400"
+              className="w-full outline-none border-b my-2 border-neutral-700 resize-none bg-transparent text-neutral-300 placeholder:text-neutral-400"
               placeholder="How may I help you today?"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
@@ -245,17 +262,11 @@ const Home = () => {
                   type="submit"
                   disabled={!prompt.trim() || isSending}
                 >
-                  {isSending ? (
-                    <CircleDashed className="animate-spin" />
-                  ) : (
-                    <SendHorizonal size={20} />
-                  )}
+                  {isSending ? <Loading /> : <SendHorizonal size={20} />}
                 </Button>
               </div>
             </div>
           </form>
-
-          <QuickActions setPrompt={setPrompt} />
         </div>
       </main>
     </div>
