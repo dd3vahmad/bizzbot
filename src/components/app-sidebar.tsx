@@ -15,39 +15,32 @@ import Logo from "./logo";
 import Link from "next/link";
 import { app } from "@/lib/constants";
 import { UserButton } from "@clerk/nextjs";
+import NoData from "./no-data";
 
-const items = [
-  {
-    title: "Cake business registration information",
-    id: 1,
-    lastMessage: "NAFDAC registration process details",
-    timestamp: "2h ago",
-  },
-  {
-    title: "Car business registration information",
-    id: 2,
-    lastMessage: "Automotive dealer license requirements",
-    timestamp: "1d ago",
-  },
-  {
-    title: "Farming business registration information",
-    id: 3,
-    lastMessage: "Agricultural licenses needed",
-    timestamp: "2d ago",
-  },
-  {
-    title: "FINTECH company launch procedures",
-    id: 4,
-    lastMessage: "CBN regulatory sandbox application",
-    timestamp: "3d ago",
-  },
-  {
-    title: "Taxes related to FINTECH companies",
-    id: 5,
-    lastMessage: "Tax optimization strategies",
-    timestamp: "1w ago",
-  },
-];
+// const chats = [
+//   {
+//     title: "Cake business registration information",
+//     id: 1,
+//   },
+//   {
+//     title: "Car business registration information",
+//     id: 2,
+//   },
+//   {
+//     title: "Farming business registration information",
+//     id: 3,
+//   },
+//   {
+//     title: "FINTECH company launch procedures",
+//     id: 4,
+//   },
+//   {
+//     title: "Taxes related to FINTECH companies",
+//     id: 5,
+//   },
+// ];
+
+const chats: any[] = [];
 
 export function AppSidebar() {
   return (
@@ -85,31 +78,27 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.id}>
-                  <SidebarMenuButton
-                    asChild
-                    className="hover:bg-neutral-700/50 hover:text-neutral-300 group"
-                  >
-                    <Link
-                      href={`/chat/${item.id}`}
-                      className="flex flex-col items-start gap-1 py-2"
+              {chats.length ? (
+                chats.map((item) => (
+                  <SidebarMenuItem key={item.id}>
+                    <SidebarMenuButton
+                      asChild
+                      className="hover:bg-neutral-700/50 hover:text-neutral-300"
                     >
-                      <span className="font-medium text-sm line-clamp-1 group-hover:text-[#E17100] transition-colors">
-                        {item.title}
-                      </span>
-                      <div className="flex items-center justify-between w-full">
-                        <span className="text-xs text-neutral-400 line-clamp-1 flex-1">
-                          {item.lastMessage}
+                      <Link
+                        href={`/chat/${item.id}`}
+                        className="flex items-center gap-1"
+                      >
+                        <span className="text-sm truncate hover:text-[#E17100] transition-colors">
+                          {item.title}
                         </span>
-                        <span className="text-xs text-neutral-500 ml-2">
-                          {item.timestamp}
-                        </span>
-                      </div>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))
+              ) : (
+                <NoData textBelow="You have no chat yet." />
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
