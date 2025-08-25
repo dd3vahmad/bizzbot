@@ -101,8 +101,7 @@ const Home = () => {
       sessionStorage.setItem("bizzbot_prompt", prompt);
       setPrompt("");
 
-      router.push(`/chat/${data.id}`);
-      window.location.reload();
+      window.location.href = `/chat/${data.id}`;
     } catch (error: any) {
       toast.error(error.message || `Unable to send ${app.name} a message`);
     } finally {
