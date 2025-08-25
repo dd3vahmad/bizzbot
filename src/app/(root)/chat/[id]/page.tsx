@@ -47,7 +47,7 @@ const ViewChat = () => {
     isLoading,
     append,
   } = useChat({
-    api: "/api/chat/messages",
+    api: "/api/messages",
     body: { chatId, user_id: userId },
     initialMessages,
   });
@@ -104,7 +104,7 @@ const ViewChat = () => {
 
   const fetchMessages = async () => {
     try {
-      const res = await fetch(`/api/chat/messages/${chatId}`);
+      const res = await fetch(`/api/messages/${chatId}`);
       const { data } = await res.json();
       setInitialMessages(data.messages);
       setTitle(data.title);
