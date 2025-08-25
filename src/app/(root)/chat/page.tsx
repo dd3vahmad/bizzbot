@@ -10,7 +10,6 @@ import {
   Paperclip,
   X,
   SendHorizonal,
-  CircleDashed,
   Mic,
   StopCircle,
 } from "lucide-react";
@@ -19,7 +18,7 @@ import { getGreeting } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { app } from "@/lib/constants";
-import QuickActions, { actions } from "@/components/QuickActions";
+import { actions } from "@/components/QuickActions";
 import Loading from "@/components/loading";
 
 const SpeechRecognition =

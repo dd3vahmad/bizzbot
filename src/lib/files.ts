@@ -1,12 +1,10 @@
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { getVectorStore } from "./faiss";
-import { useSupabase } from "./supabase";
+import supabase from "./supabase/client";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { DocxLoader } from "@langchain/community/document_loaders/fs/docx";
 import { PPTXLoader } from "@langchain/community/document_loaders/fs/pptx";
 import { TextLoader } from "langchain/document_loaders/fs/text";
-
-const supabase = useSupabase();
 
 export async function ingestFile(filePath: string, fileName: string) {
   const store = await getVectorStore();

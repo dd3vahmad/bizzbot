@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
-import { useSupabase } from "@/lib/supabase";
+import supabase from "@/lib/supabase/client";
 
-const supabase = useSupabase();
+// const supabase = createClient();
 
 interface Document {
   file_name: string;

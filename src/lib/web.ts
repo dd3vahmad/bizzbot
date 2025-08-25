@@ -9,9 +9,7 @@ import {
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { getVectorStore } from "./faiss";
 import { SelectorType } from "cheerio";
-import { useSupabase } from "./supabase";
-
-const supabase = useSupabase();
+import supabase from "./supabase/client";
 
 /** ---------- HELPERS ---------- **/
 const cheerio = (webPath: string, params?: CheerioWebBaseLoaderParams) =>
