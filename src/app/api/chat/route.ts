@@ -3,6 +3,7 @@ import { google } from "@ai-sdk/google";
 import createClient from "@/lib/supabase/server";
 import { _res } from "@/lib/utils";
 import { NextRequest } from "next/server";
+import { getTitlePrompt } from "@/data/prompts";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,7 +15,7 @@ export async function POST(req: NextRequest) {
 
     const { text: suggestedTitle } = await generateText({
       model: google("gemini-2.0-flash"),
-      prompt: `Generate a short (max 5 words) title using plain text (no markdown or any other format) in Title Case that summarizes this conversation so far.\n\nUser: "${message}"\n\nTitle:`,
+      prompt: getTitlePrompt(message),
     });
 
     const title = suggestedTitle.replace(/[".]/g, "").trim();

@@ -98,7 +98,7 @@ const Home = () => {
 
       const { data } = await res.json();
 
-      sessionStorage.setItem("mono_prompt", prompt);
+      sessionStorage.setItem("bizzbot_prompt", prompt);
       setPrompt("");
 
       router.push(`/chat/${data.id}`);

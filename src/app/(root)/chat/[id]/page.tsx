@@ -127,13 +127,13 @@ const ViewChat = () => {
 
   useEffect(() => {
     const bootstrap = async () => {
-      const prompt = sessionStorage.getItem("mono_prompt");
+      const prompt = sessionStorage.getItem("bizzbot_prompt");
       if (prompt) {
         await append(
           { role: "user", content: prompt, createdAt: new Date() },
           { body: { chatId } }
         );
-        sessionStorage.removeItem("mono_prompt");
+        sessionStorage.removeItem("bizzbot_prompt");
       } else {
         await fetchMessages();
       }
