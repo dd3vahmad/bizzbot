@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ai-sdk/google": "^2.0.5",
+    "@ai-sdk/google": "^1.2.22",
     "@clerk/nextjs": "^6.30.1",
     "@google/generative-ai": "^0.24.1",
     "@langchain/community": "^0.3.50",
