@@ -7,7 +7,7 @@ import { getTitlePrompt } from "@/data/prompts";
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = createClient(req);
+    const supabase = await createClient(req);
     const { message, user_id } = await req.json();
     if (!message || !user_id) {
       return _res.error(400, "Missing message or user_id");
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-    const supabase = createClient(req);
+    const supabase = await createClient(req);
 
     const { data: chats, error } = await supabase
       .from("chats")

@@ -9,7 +9,7 @@ export async function GET(
   try {
     const { id } = await params;
 
-    const supabase = createClient(req);
+    const supabase = await createClient(req);
 
     const { data: chat, error: chatError } = await supabase
       .from("chats")

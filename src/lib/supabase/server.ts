@@ -1,5 +1,7 @@
-import { createServerClient } from "@supabase/ssr";
+import { auth } from "@clerk/nextjs/server";
+import { createClient as CC } from "@supabase/supabase-js";
 import { NextRequest } from "next/server";
+import { _res } from "../utils";
 
 const supabaseUrl =
   process.env.NODE_ENV === "development"
@@ -11,13 +13,11 @@ const supabaseAnonKey =
     ? process.env.SUPABASE_DEV_ANON_KEY!
     : process.env.SUPABASE_ANON_KEY!;
 
-const createClient = (req: NextRequest) => {
-  return createServerClient(supabaseUrl, supabaseAnonKey, {
-    cookies: {
-      get(name: string) {
-        return req.cookies.get(name)?.value;
-      },
-    },
+const createClient = async (req: NextRequest) => {
+  const { getToken } = await auth();
+
+  return CC(supabaseUrl, supabaseAnonKey, {
+    accessToken: getToken,
   });
 };
 

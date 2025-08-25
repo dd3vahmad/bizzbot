@@ -9,7 +9,7 @@ export const maxDuration = 30;
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = createClient(req);
+    const supabase = await createClient(req);
     const { messages, chatId, user_id } = await req.json();
     const lastMessage = messages.at(-1);
 
