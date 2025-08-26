@@ -6,18 +6,18 @@
 
 ## Table of Contents
 
-* [About the Project](#-about-the-project)
-* [Hackathon Details](#-hackathon-details)
-* [Features](#-features)
-* [Tech Stack](#-tech-stack)
-* [Architecture](#-architecture)
-* [Setup Instructions](#-setup-instructions)
-* [Environment Variables](#-environment-variables)
-* [Data Sources & Citations](#-data-sources--citations)
-* [Demo](#-demo)
-* [Future Improvements](#-future-improvements)
-* [Team](#-team)
-* [License](#-license)
+* [About the Project](#about-the-project)
+* [Hackathon Details](#hackathon-details)
+* [Features](#features)
+* [Tech Stack](#tech-stack)
+* [Architecture](#architecture)
+* [Setup Instructions](#setup-instructions)
+* [Environment Variables](#environment-variables)
+* [Data Sources & Citations](#data-sources--citations)
+* [Demo](#demo)
+* [Future Improvements](#future-improvements)
+* [Team](#team)
+* [License](#license)
 
 ---
 
