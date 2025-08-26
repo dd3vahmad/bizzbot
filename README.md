@@ -79,7 +79,7 @@ Running a business in Nigeria often requires navigating **complex rules around t
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/dd3vahmad/bizzbot.git
+git clone https://github.com/dd3vahmad/bizzbot-eta.git
 cd bizzbot
 ```
 
