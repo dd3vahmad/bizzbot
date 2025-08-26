@@ -57,7 +57,7 @@ Running a business in Nigeria often requires navigating **complex rules around t
 * **RAG**: Langchain
 * **Vector Storage**: FAISS - Facebook AI Similarity Search
 * **Web Scraping**: Playwright & Cheerio
-* **AI**: [Gemini LLM (gemini-2.0-flash)](https://ai.google.com/) (for conversational intelligence)
+* **AI**: [Gemini LLM (gemini-2.0-flash)](https://aistudio.google.com/) (for conversational intelligence)
 * **Deployment**: Vercel
 
 ---
@@ -167,7 +167,7 @@ Visit [http://localhost:3000](http://localhost:3000)
 
 ## Demo
 
-* **Live Demo**: [https://bizzbot.vercel.app](https://bizzbot.vercel.app)
+* **Live Demo**: [Click to visit](https://bizzbot-eta.vercel.app)
 * **Screenshots**:
 
 ![Chat UI Screenshot](./assets/demo1.png)
