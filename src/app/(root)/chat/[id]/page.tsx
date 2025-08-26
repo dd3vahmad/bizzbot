@@ -6,7 +6,6 @@ import { useState, useRef, useEffect } from "react";
 import { SendHorizonal, StopCircle, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { useParams } from "next/navigation";
 import Logo from "@/components/logo";
 import { Message, useChat } from "ai/react";
@@ -20,7 +19,7 @@ import Loading from "@/components/loading";
 const SpeechRecognition =
   typeof window !== "undefined"
     ? (window as any).webkitSpeechRecognition ||
-      (window as any).SpeechRecognition
+    (window as any).SpeechRecognition
     : null;
 
 const ViewChat = () => {
@@ -29,15 +28,11 @@ const ViewChat = () => {
   const { userId } = useAuth();
   const { user } = useUser();
   const [title, setTitle] = useState("View Chat");
-  const [message, setMessage] = useState("");
-  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [chatsLoading, setChatsLoading] = useState(true);
   const [initialMessages, setInitialMessages] = useState<Message[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<typeof SpeechRecognition | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const {
     input,
@@ -140,19 +135,10 @@ const ViewChat = () => {
     };
     bootstrap();
   }, [chatId, append]);
-
-  // const handleFileAttach = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = Array.from(event.target.files || []);
-  //   setAttachedFiles((prev) => [...prev, ...files]);
-  // };
-
-  // const removeFile = (index: number) => {
-  //   setAttachedFiles((prev) => prev.filter((_, i) => i !== index));
-  // };
   const greeting = `${getGreeting()}, ${user?.firstName}`;
 
   return (
-    <div className="flex flex-col min-h-screen w-full relative">
+    <div className="flex flex-col h-screen w-full">
       {/* Header */}
       <div className="border-b border-neutral-700/50 bg-neutral-800/50 py-4 px-8 flex items-center justify-between w-full">
         <h1 className="text-lg font-semibold text-neutral-100 line-clamp-1">
@@ -172,91 +158,89 @@ const ViewChat = () => {
         </div>
       </div>
 
-      <div className="text-sm flex-1 flex flex-col items-center w-full relative max-w-[580px] mx-auto">
-        <div
-          id="message-container"
-          className="w-full flex flex-col overflow-y-auto flex-1 scrollbar-thumb-rounded scrollbar-thumb-blue scrollbar-track-blue-lighter scrollbar-w-2 pb-24 pt-20"
-        >
-          {chatsLoading ? (
-            <div className="flex-1 flex justify-center items-center">
-              <Loading />
-            </div>
-          ) : (
-            messages.map((m, i) => (
-              <ChatMessage
-                key={m.id}
-                message={m}
-                isLoading={isLoading}
-                isLastMessage={messages.length - 1 === i}
-              />
-            ))
-          )}
-        </div>
-
-        <div
-          className={`w-full ${message.length ? "border-t border-x" : "border"} border-neutral-700 bg-neutral-800 rounded-t-2xl min-h-[100px] absolute ${messages.length ? "bottom-0" : "top-0"} px-4 pt-2 pb-4`}
-        >
-          <div
-            hidden={!!input || isRecording}
-            className="flex flex-wrap gap-2 text-xs items-center justify-center px-1 py-2"
-          >
-            {actions.map(({ icon: Icon, label, query }, i) => (
-              <div
-                key={i}
-                onClick={() =>
-                  handleInputChange({ target: { value: query } } as any)
-                }
-                className="px-2 py-1 border rounded border-neutral-700 cursor-pointer text-neutral-500 font-semibold flex items-center gap-1"
-              >
-                <Icon /> <h2 className="text-xs">{label}</h2>
-              </div>
-            ))}
+      <div
+        id="message-container"
+        className="w-full flex max-w-[50vw] mx-auto flex-col overflow-y-auto flex-1 scrollbar-hide pb-36 pt-10"
+      >
+        {chatsLoading ? (
+          <div className="flex-1 flex justify-center items-center">
+            <Loading />
           </div>
-
-          <form
-            onSubmit={handleSubmit}
-            className="w-full flex items-start px-1 mt-2"
-          >
-            <Textarea
-              ref={textareaRef}
-              rows={1}
-              value={input}
-              placeholder="Ask me about your business..."
-              onChange={handleInputChange}
-              onKeyDown={handleInputKeyDown}
-              className="w-full border border-neutral-700 resize-none scrollbar-none overflow-hidden py-3 px-4 placeholder:font-semibold placeholder:text-neutral-700 outline-none flex-1 bg-transparent"
+        ) : (
+          messages.map((m, i) => (
+            <ChatMessage
+              key={m.id}
+              message={m}
+              isLoading={isLoading}
+              isLastMessage={messages.length - 1 === i}
             />
+          ))
+        )}
+      </div>
 
-            <div className="flex items-center">
-              {isRecording ? (
-                <StopCircle
-                  size={20}
-                  onClick={stopRecognition}
-                  className="text-neutral-500 animate-pulse mx-4"
-                />
-              ) : (
-                <Mic
-                  size={20}
-                  onClick={handleMicClick}
-                  className="mx-3 cursor-pointer text-neutral-600"
-                />
-              )}
-
-              <Button
-                hidden={isRecording}
-                type="submit"
-                className="text-white bg-amber-600 rounded"
-                disabled={!input.trim() || isLoading}
-              >
-                {isLoading ? (
-                  <span className="text-sm px-2">Sending...</span>
-                ) : (
-                  <SendHorizonal size={20} />
-                )}
-              </Button>
+      <div
+        className={`w-full max-w-[580px] mx-auto ${prompt.length ? "border-t border-x" : "border"} lg:fixed lg:-bottom-12 border-neutral-700 bg-neutral-800 lg:left-1/2 lg:-translate-1/3 rounded-t-2xl min-h-[100px] px-4 pt-2 pb-4`}
+      >
+        <div
+          hidden={!!input || isRecording}
+          className="flex flex-wrap gap-2 text-xs items-center justify-center px-1 py-2"
+        >
+          {actions.map(({ icon: Icon, label, query }, i) => (
+            <div
+              key={i}
+              onClick={() =>
+                handleInputChange({ target: { value: query } } as any)
+              }
+              className="px-2 py-1 border rounded border-neutral-700 cursor-pointer text-neutral-500 font-semibold flex items-center gap-1"
+            >
+              <Icon /> <h2 className="text-xs">{label}</h2>
             </div>
-          </form>
+          ))}
         </div>
+
+        <form
+          onSubmit={handleSubmit}
+          className="w-full flex items-start px-1 mt-2"
+        >
+          <Textarea
+            ref={textareaRef}
+            rows={1}
+            value={input}
+            placeholder="Ask me about your business..."
+            onChange={handleInputChange}
+            onKeyDown={handleInputKeyDown}
+            className="w-full border border-neutral-700 resize-none scrollbar-none overflow-hidden py-3 px-4 placeholder:font-semibold placeholder:text-neutral-700 outline-none flex-1 bg-transparent"
+          />
+
+          <div className="flex items-center">
+            {isRecording ? (
+              <StopCircle
+                size={20}
+                onClick={stopRecognition}
+                className="text-neutral-500 animate-pulse mx-4"
+              />
+            ) : (
+              <Mic
+                size={20}
+                onClick={handleMicClick}
+                className="mx-3 cursor-pointer text-neutral-600"
+              />
+            )}
+
+            <Button
+              hidden={isRecording}
+              type="submit"
+              className="text-white bg-amber-600 rounded"
+              disabled={!input.trim() || isLoading}
+            >
+              {isLoading ? (
+                <Loading />
+              ) : (
+                <SendHorizonal size={20} />
+              )}
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );

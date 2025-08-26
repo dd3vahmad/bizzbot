@@ -49,7 +49,7 @@ const ChatMessage = ({ message, isLoading, isLastMessage }: Props) => {
     >
       <div
         className={cn(
-          "px-3 py-2 mx-2 rounded max-w-[320px] overflow-x-hidden",
+          "px-3 py-2 mx-2 rounded max-w-[320px] lg:max-w-[520px] overflow-x-hidden",
           {
             "bg-neutral-800/80": message.role === "user",
             "text-white": message.role === "assistant",

@@ -84,7 +84,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {isLoading ? (
                 <Loading />
-              ) : chats.length ? (
+              ) : chats && chats.length ? (
                 chats.map((item) => (
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton
