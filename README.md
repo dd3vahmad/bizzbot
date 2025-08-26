@@ -57,7 +57,7 @@ Running a business in Nigeria often requires navigating **complex rules around t
 * **RAG**: Langchain
 * **Vector Storage**: FAISS - Facebook AI Similarity Search
 * **Web Scraping**: Playwright & Cheerio
-* **AI**: [Gemini LLM (gemini-2.0-flash)](https://ai.google.com/) (for conversational intelligence)
+* **AI**: [Gemini LLM (gemini-2.0-flash)](https://aistudio.google.com/) (for conversational intelligence)
 * **Deployment**: Vercel
 
 ---
@@ -79,7 +79,7 @@ Running a business in Nigeria often requires navigating **complex rules around t
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/dd3vahmad/bizzbot.git
+git clone https://github.com/dd3vahmad/bizzbot-eta.git
 cd bizzbot
 ```
 
