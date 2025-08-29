@@ -7,9 +7,10 @@ import {
   PlaywrightWebBaseLoaderOptions,
 } from "@langchain/community/document_loaders/web/playwright";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { getVectorStore } from "./faiss";
+import { directory, embeddings, getVectorStore } from "./faiss";
 import { SelectorType } from "cheerio";
 import supabase from "./supabase/client";
+import { FaissStore } from "@langchain/community/vectorstores/faiss";
 
 /** ---------- HELPERS ---------- **/
 const cheerio = (webPath: string, params?: CheerioWebBaseLoaderParams) =>
@@ -74,21 +75,10 @@ const firsUrls = [
 
 // Run scrapers
 export async function ingestData() {
-  const store = await getVectorStore();
-
-  // Delete old web data if exists
-  const { data: existing } = await supabase
-    .from("embedded_documents")
-    .select("chunk_ids")
-    .eq("file_name", "web_data")
-    .single();
-
-  if (existing && existing.chunk_ids.length > 0) {
-    await store.delete(existing.chunk_ids);
-  }
+  let store = await getVectorStore();
 
   console.log("Scraping SEC (static)...");
-  const secDocs = await scrapeStatic(secUrls, "section");
+  // const secDocs = await scrapeStatic(secUrls, "section");
 
   console.log("Scraping CAC News (static)...");
   const cacDocs = await scrapeStatic(cacNewsPages, "article");
@@ -97,33 +87,38 @@ export async function ingestData() {
   // const firsDocs = await scrapeDynamic(firsUrls, "main");
 
   // const allDocs = [...secDocs, ...cacDocs, ...firsDocs];
-  const allDocs = [...secDocs, ...cacDocs];
+  const allDocs = cacDocs;
+  // const allDocs = [...secDocs, ...cacDocs];
   console.log(`Scraped ${allDocs.length} documents`);
 
   /** ---------- CHUNKING ---------- **/
   const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 100,
+    chunkSize: 500,
+    chunkOverlap: 1,
   });
   const splitDocs = await splitter.splitDocuments(allDocs);
-
+  console.log("Split Docs: ", splitDocs);
   // Set source to 'web_data' for all
   splitDocs.forEach((doc) => {
     doc.metadata.source = "web_data";
   });
 
-  // Get old keys
-  const oldKeys = new Set(Object.keys((store as any).docstore._dict));
-
   /** ---------- STORE IN FAISS ---------- **/
   console.log("Saving to FAISS...");
-  await store.addDocuments(splitDocs);
+  if (!store) {
+    store = await FaissStore.fromDocuments(splitDocs, embeddings);
+  } else {
+    await store.addDocuments(splitDocs);
+  }
+
+  await store.save(directory);
+
+  // Get old keys
+  const oldKeys = new Set(Object.keys((store as any).docstore._dict));
 
   // Get new ids
   const allKeys = Object.keys((store as any).docstore._dict);
   const newIds = allKeys.filter((k) => !oldKeys.has(k));
-
-  await store.save("./faiss_index");
 
   // Upsert metadata
   await supabase.from("embedded_documents").upsert({
@@ -133,9 +128,4 @@ export async function ingestData() {
   });
 
   console.log(`Data ingestion complete. FAISS index saved`);
-}
-
-// Run when file executed directly
-if (require.main === module) {
-  ingestData().catch(console.error);
 }

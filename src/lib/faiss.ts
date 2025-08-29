@@ -2,19 +2,18 @@ import fs from "fs";
 import { FaissStore } from "@langchain/community/vectorstores/faiss";
 import { GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
 
-const embeddings = new GoogleGenerativeAIEmbeddings({
+export const embeddings = new GoogleGenerativeAIEmbeddings({
   model: "models/gemini-embedding-001",
-  apiKey: process.env.GOOGLE_API_KEY, // Assume set in env
+  apiKey: process.env.GOOGLE_API_KEY,
 });
 
-const directory = "./faiss_index";
+export const directory = "./faiss_index";
+const fileStore = "./faiss_index/docstore.json"
 
 export async function getVectorStore() {
-  if (fs.existsSync(directory)) {
+  if (fs.existsSync(fileStore)) {
     return await FaissStore.load(directory, embeddings);
   } else {
-    const store = await FaissStore.fromTexts([], [], embeddings);
-    await store.save(directory);
-    return store;
+    return null;
   }
 }
