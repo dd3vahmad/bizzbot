@@ -5,11 +5,19 @@ import createClient from "@/lib/supabase/server";
 export async function GET(req: NextRequest) {
   try {
     const supabase = await createClient(req);
+    const query = req.nextUrl.searchParams.get("q")?.trim();
 
-    const { data: chats, error } = await supabase
+    let queryBuilder = supabase
       .from("chats")
-      .select("*")
-      .order("created_at", { ascending: false });
+      .select("*", { count: "exact" })
+
+    if (query) {
+      const search = `%${query}%`
+      queryBuilder.or(
+        `title.ilike.${search}`
+      )
+    }
+    const { data: chats, error } = await queryBuilder.order("created_at", { ascending: false })
     if (error) {
       throw error;
     }

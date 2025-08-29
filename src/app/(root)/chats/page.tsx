@@ -17,8 +17,9 @@ export default function AllChatsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [chats, setChats] = useState<IChat[]>([]);
   const fetchChats = async () => {
+    setIsLoading(false)
     try {
-      const res = await fetch("/api/chat/all", {
+      const res = await fetch(`/api/chat/all?q=${searchQuery}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" }
       });
@@ -33,7 +34,7 @@ export default function AllChatsPage() {
 
   useEffect(() => {
     fetchChats();
-  }, []);
+  }, [searchQuery]);
 
   return (
     <div className="flex flex-col h-screen w-full">
