@@ -26,6 +26,7 @@ export async function GET(
 
     if (msgError) throw msgError;
 
+    console.log("Message error: ", msgError)
     return _res.success(200, "Messages fetched successfully", {
       ...chat,
       messages: messages?.map((m: any) => ({

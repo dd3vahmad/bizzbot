@@ -179,7 +179,7 @@ const ViewChat = () => {
       </div>
 
       <div
-        className={`w-full max-w-[580px] mx-auto ${prompt.length ? "border-t border-x" : "border"} lg:fixed lg:-bottom-12 border-neutral-700 bg-neutral-800 lg:left-1/2 lg:-translate-1/3 rounded-t-2xl min-h-[100px] px-4 pt-2 pb-4`}
+        className={`w-full max-w-[580px] mx-auto border-t border-x lg:fixed lg:-bottom-12 border-neutral-700 bg-neutral-800 lg:left-1/2 lg:-translate-1/3 rounded-t-2xl min-h-[100px] px-4 pt-2 pb-4`}
       >
         <div
           hidden={!!input || isRecording}

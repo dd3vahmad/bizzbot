@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
         .from("chats")
         .select("id")
         .eq("id", chat_id)
-        .maybeSingle();
+        .single();
       if (!data) throw new Error("Chat not found or not owned by user");
     }
 
@@ -45,7 +45,9 @@ export async function POST(req: NextRequest) {
       role: "user",
       content: lastMessage.content,
     });
+    console.log("Message creation ran.")
     if (error) {
+      console.log("User message error: ", error)
       throw error;
     }
 
@@ -54,7 +56,7 @@ export async function POST(req: NextRequest) {
 
     let assistantText = "";
 
-    const result = await streamText({
+    const result = streamText({
       model: google("gemini-2.0-flash"),
       system: systemPrompt,
       messages,
