@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -22,20 +20,6 @@ import { app } from "@/lib/constants";
 import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default async function HomePage() {
-  const ingestData = async () => {
-    try {
-      const res = await fetch("/api/ingest", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" }
-      })
-      const data = await res.json();
-
-      console.log("Data: ", data);
-    } catch (error) {
-      console.log("Error: ", error);
-    }
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
       {/* Header */}
@@ -105,7 +89,6 @@ export default async function HomePage() {
             Get instant answers to your registration, tax, and trade questions.
             Navigate Nigerian business regulations with confidence.
           </p>
-          <Button onClick={ingestData}>Ingest Data</Button>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <Button
               size="lg"

@@ -50,6 +50,21 @@ const AdminPanel = () => {
     }
   };
 
+
+  const ingestData = async () => {
+    try {
+      const res = await fetch("/api/ingest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      })
+      const data = await res.json();
+
+      console.log("Data: ", data);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
   const onDrop = async (acceptedFiles: File[]) => {
     setLoading(true);
     setMessage(null);
@@ -94,8 +109,7 @@ const AdminPanel = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <button
-          onClick={handleIngestWeb}
-          disabled={loading}
+          onClick={ingestData}
           className="bg-amber-500 text-white py-2 px-4 rounded hover:bg-amber-600 disabled:opacity-50"
         >
           {loading ? "Ingesting..." : "Ingest Web Data"}
@@ -103,9 +117,8 @@ const AdminPanel = () => {
 
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed border-amber-300 p-6 rounded cursor-pointer text-center ${
-            isDragActive ? "bg-amber-100" : ""
-          }`}
+          className={`border-2 border-dashed border-amber-300 p-6 rounded cursor-pointer text-center ${isDragActive ? "bg-amber-100" : ""
+            }`}
         >
           <input {...getInputProps()} />
           <p className="text-amber-600">

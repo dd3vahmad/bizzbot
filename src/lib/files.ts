@@ -1,5 +1,5 @@
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { getVectorStore } from "./faiss";
+import { getVectorStore } from "./store";
 import supabase from "./supabase/client";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { DocxLoader } from "@langchain/community/document_loaders/fs/docx";
@@ -46,21 +46,12 @@ export async function ingestFile(filePath: string, fileName: string) {
   // Set metadata source
   splitDocs.forEach((d) => (d.metadata.source = fileName));
 
-  // Get old keys
-  const oldKeys = new Set(Object.keys((store as any).docstore._dict));
-
+  // Update
   await store.addDocuments(splitDocs);
-
-  // Get new ids
-  const allKeys = Object.keys((store as any).docstore._dict);
-  const newIds = allKeys.filter((k) => !oldKeys.has(k));
-
-  await store.save("./faiss_index");
 
   // Upsert metadata
   await supabase.from("embedded_documents").upsert({
     file_name: fileName,
     uploaded_at: new Date().toISOString(),
-    chunk_ids: newIds,
   });
 }
