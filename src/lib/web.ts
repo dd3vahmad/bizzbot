@@ -75,18 +75,13 @@ const firsUrls = [
 export async function ingestData() {
   let store = await getVectorStore();
 
-  console.log("Scraping SEC (static)...");
   const secDocs = await scrapeStatic(secUrls, "section");
-
-  console.log("Scraping CAC News (static)...");
   const cacDocs = await scrapeStatic(cacNewsPages, "article");
-
   // console.log("Scraping FIRS (dynamic)...");
   // const firsDocs = await scrapeDynamic(firsUrls, "main");
 
   // const allDocs = [...secDocs, ...cacDocs, ...firsDocs];
   const allDocs = [...secDocs, ...cacDocs];
-  console.log(`Scraped ${allDocs.length} documents`);
 
   /** ---------- CHUNKING ---------- **/
   const splitter = new RecursiveCharacterTextSplitter({
@@ -99,5 +94,4 @@ export async function ingestData() {
   });
 
   await store.addDocuments(splitDocs);
-  console.log("Data ingested into Supabase!");
 }
