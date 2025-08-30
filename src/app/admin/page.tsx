@@ -3,8 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import supabase from "@/lib/supabase/client";
-
-// const supabase = createClient();
+import { toast } from "sonner";
 
 interface Document {
   file_name: string;
@@ -53,15 +52,14 @@ const AdminPanel = () => {
 
   const ingestData = async () => {
     try {
-      const res = await fetch("/api/ingest", {
+      await fetch("/api/ingest", {
         method: "POST",
         headers: { "Content-Type": "application/json" }
       })
-      const data = await res.json();
 
-      console.log("Data: ", data);
-    } catch (error) {
-      console.log("Error: ", error);
+      toast.success("Web data scraped and ingested succesfully");
+    } catch (error: any) {
+      toast.error(error.message || "Oops an error occurred");
     }
   }
 

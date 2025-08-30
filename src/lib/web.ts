@@ -83,12 +83,18 @@ export async function ingestData() {
   // const allDocs = [...secDocs, ...cacDocs, ...firsDocs];
   const allDocs = [...secDocs, ...cacDocs];
 
+  /** ---------- CLEAN CONTENT ---------- **/
+  const cleanedDocs = allDocs.map((doc) => ({
+    ...doc,
+    pageContent: doc.pageContent.replace(/\s+/g, " ").trim(), // remove tabs, newlines, and collapse multiple spaces
+  }));
+
   /** ---------- CHUNKING ---------- **/
   const splitter = new RecursiveCharacterTextSplitter({
     chunkSize: 500,
     chunkOverlap: 1,
   });
-  const splitDocs = await splitter.splitDocuments(allDocs);
+  const splitDocs = await splitter.splitDocuments(cleanedDocs);
   splitDocs.forEach((doc) => {
     doc.metadata.source = "web_data";
   });

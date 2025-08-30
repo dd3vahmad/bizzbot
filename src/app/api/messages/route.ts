@@ -1,4 +1,5 @@
 import { d_prompt, getContextPrompt, getTitlePrompt } from "@/data/prompts";
+import { getVectorStore } from "@/lib/store";
 import createClient from "@/lib/supabase/server";
 import { _res } from "@/lib/utils";
 import { google } from "@ai-sdk/google";
@@ -45,13 +46,16 @@ export async function POST(req: NextRequest) {
       role: "user",
       content: lastMessage.content,
     });
-    console.log("Message creation ran.")
     if (error) {
-      console.log("User message error: ", error)
       throw error;
     }
 
-    const context = ""; // TODO: load RAG context here
+    const store = await getVectorStore();
+    const results = await store.similaritySearch(lastMessage.content, 3);
+
+    let context = results.reduce((acc, doc) => {
+      return acc + doc.pageContent.replace(/\n|\t/g, " ") + "\n---\n";
+    }, "");
     const systemPrompt = context ? getContextPrompt(context) : d_prompt;
 
     let assistantText = "";
