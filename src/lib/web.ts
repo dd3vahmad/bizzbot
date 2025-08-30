@@ -77,11 +77,11 @@ export async function ingestData() {
 
   const secDocs = await scrapeStatic(secUrls, "section");
   const cacDocs = await scrapeStatic(cacNewsPages, "article");
-  // console.log("Scraping FIRS (dynamic)...");
-  // const firsDocs = await scrapeDynamic(firsUrls, "main");
+  const firsDocs = await scrapeDynamic(firsUrls, "main");
 
-  // const allDocs = [...secDocs, ...cacDocs, ...firsDocs];
-  const allDocs = [...secDocs, ...cacDocs];
+  const allDocs = [...secDocs, ...cacDocs, ...firsDocs];
+  console.log("All Docs: ", allDocs)
+  // const allDocs = [...secDocs, ...cacDocs];
 
   /** ---------- CLEAN CONTENT ---------- **/
   const cleanedDocs = allDocs.map((doc) => ({

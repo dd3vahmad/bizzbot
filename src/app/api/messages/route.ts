@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     const results = await store.similaritySearch(lastMessage.content, 3);
 
     let context = results.reduce((acc, doc) => {
-      return acc + doc.pageContent.replace(/\n|\t/g, " ") + "\n---\n";
+      return acc + doc.pageContent + "\n---\n";
     }, "");
     const systemPrompt = context ? getContextPrompt(context) : d_prompt;
 
