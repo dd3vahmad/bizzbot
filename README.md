@@ -55,7 +55,7 @@ Running a business in Nigeria often requires navigating **complex rules around t
 * **Backend**: [Supabase](https://supabase.com/) (Postgres Data Storage + RLS)
 * **Vercel AI SDK**: For AI response streaming effect
 * **RAG**: Langchain
-* **Vector Storage**: FAISS - Facebook AI Similarity Search
+* **Vector Storage**: Supabase
 * **Web Scraping**: Playwright & Cheerio
 * **AI**: [Gemini LLM (gemini-2.0-flash)](https://aistudio.google.com/) (for conversational intelligence)
 * **Deployment**: Vercel
@@ -67,7 +67,6 @@ Running a business in Nigeria often requires navigating **complex rules around t
 * **Next.js (App Router)** → Handles UI & API endpoints
 * **Supabase** → Chat history and messages storage
 * **Langchain** → For retrieval argumented generation of response
-* **FAISS** → For storing vector embeddings of the scraped data
 * **Gemini API** → Provides conversational AI responses
 * **Vercel AI SDK** → For AI response streaming effect
 * **Deployed on Vercel** → Seamless hosting & edge functions
@@ -79,7 +78,7 @@ Running a business in Nigeria often requires navigating **complex rules around t
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/dd3vahmad/bizzbot-eta.git
+git clone https://github.com/dd3vahmad/bizzbot.git
 cd bizzbot
 ```
 
