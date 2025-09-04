@@ -24,7 +24,7 @@ import Loading from "@/components/loading";
 const SpeechRecognition =
   typeof window !== "undefined"
     ? (window as any).webkitSpeechRecognition ||
-      (window as any).SpeechRecognition
+    (window as any).SpeechRecognition
     : null;
 
 const Home = () => {
@@ -170,7 +170,7 @@ const Home = () => {
         <div className="flex flex-col min-h-[400px] items-center max-w-2xl w-full">
           <div className="flex items-center gap-2 px-2 mb-8">
             <Logo size="xs" className="cursor-pointer" />
-            <h1 className="text-3xl md:text-4xl font-bold text-neutral-300">
+            <h1 className="text-2xl md:text-4xl font-bold text-neutral-300">
               {greeting}
             </h1>
           </div>
