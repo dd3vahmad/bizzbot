@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import ChatMessage from "@/components/ChatMessage";
 import { getGreeting } from "@/lib/utils";
 import Loading from "@/components/loading";
+import Shortcut from "@/components/Shortcut";
 
 const SpeechRecognition =
   typeof window !== "undefined"
@@ -156,6 +157,7 @@ const ViewChat = () => {
             {greeting}
           </h1>
         </div>
+        <Shortcut />
       </div>
 
       <div

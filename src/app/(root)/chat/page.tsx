@@ -15,11 +15,11 @@ import {
 } from "lucide-react";
 import { useAuth, UserButton, useUser } from "@clerk/nextjs";
 import { getGreeting } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { app } from "@/lib/constants";
 import { actions } from "@/components/QuickActions";
 import Loading from "@/components/loading";
+import Shortcut from "@/components/Shortcut";
 
 const SpeechRecognition =
   typeof window !== "undefined"
@@ -30,7 +30,6 @@ const SpeechRecognition =
 const Home = () => {
   const { userId } = useAuth();
   const { user } = useUser();
-  const router = useRouter();
   const [prompt, setPrompt] = useState("");
   const [isSending, setIsSending] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -134,7 +133,7 @@ const Home = () => {
     }
   };
 
-  const greeting = `${getGreeting()}, ${user?.firstName}`;
+  const greeting = `${getGreeting()}, ${user?.firstName || "User"}`;
 
   return (
     <div className="w-full h-screen flex flex-col">
@@ -174,6 +173,7 @@ const Home = () => {
               {greeting}
             </h1>
           </div>
+          <Shortcut />
 
           <form
             onSubmit={handleSubmit}
