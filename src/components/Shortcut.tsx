@@ -1,9 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Shortcut = () => {
-  const [showInfo, setShowInfo] = useState<boolean>(!!localStorage.getItem("showInfo") || true);
+  const [showInfo, setShowInfo] = useState<boolean>(true);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("showInfo");
+    if (saved !== null) {
+      setShowInfo(saved === "true");
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("showInfo", String(showInfo));
+  }, [showInfo]);
 
   return (
     <p hidden={!showInfo} className="text-sm text-neutral-600 border border-neutral-700 space-x-2 rounded py-1">
