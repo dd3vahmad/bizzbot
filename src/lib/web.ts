@@ -73,7 +73,7 @@ const firsUrls = [
 
 // Run scrapers
 export async function ingestData() {
-  let store = await getVectorStore();
+  const store = await getVectorStore();
 
   const secDocs = await scrapeStatic(secUrls, "section");
   const cacDocs = await scrapeStatic(cacNewsPages, "article");

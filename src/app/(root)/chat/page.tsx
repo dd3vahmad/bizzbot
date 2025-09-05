@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { useAuth, UserButton, useUser } from "@clerk/nextjs";
 import { getGreeting } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { app } from "@/lib/constants";
 import { actions } from "@/components/QuickActions";
@@ -30,7 +29,6 @@ const SpeechRecognition =
 const Home = () => {
   const { userId } = useAuth();
   const { user } = useUser();
-  const router = useRouter();
   const [prompt, setPrompt] = useState("");
   const [isSending, setIsSending] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);

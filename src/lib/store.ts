@@ -9,7 +9,7 @@ const client = createClient(
 
 export const embeddings = new GoogleGenerativeAIEmbeddings({
   model: "models/gemini-embedding-001",
-  apiKey: process.env.GOOGLE_API_KEY,
+  apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
 });
 
 export async function getVectorStore() {

@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     const supabase = await createClient(req);
     const query = req.nextUrl.searchParams.get("q")?.trim();
 
-    let queryBuilder = supabase
+    const queryBuilder = supabase
       .from("chats")
       .select("*", { count: "exact" })
 
