@@ -19,11 +19,12 @@ import { toast } from "sonner";
 import { app } from "@/lib/constants";
 import { actions } from "@/components/QuickActions";
 import Loading from "@/components/loading";
+import Shortcut from "@/components/Shortcut";
 
 const SpeechRecognition =
   typeof window !== "undefined"
     ? (window as any).webkitSpeechRecognition ||
-      (window as any).SpeechRecognition
+    (window as any).SpeechRecognition
     : null;
 
 const Home = () => {
@@ -132,7 +133,7 @@ const Home = () => {
     }
   };
 
-  const greeting = `${getGreeting()}, ${user?.firstName}`;
+  const greeting = `${getGreeting()}, ${user?.firstName || "User"}`;
 
   return (
     <div className="w-full h-screen flex flex-col">
@@ -168,10 +169,11 @@ const Home = () => {
         <div className="flex flex-col min-h-[400px] items-center max-w-2xl w-full">
           <div className="flex items-center gap-2 px-2 mb-8">
             <Logo size="xs" className="cursor-pointer" />
-            <h1 className="text-3xl md:text-4xl font-bold text-neutral-300">
+            <h1 className="text-2xl md:text-4xl font-bold text-neutral-300">
               {greeting}
             </h1>
           </div>
+          <Shortcut />
 
           <form
             onSubmit={handleSubmit}

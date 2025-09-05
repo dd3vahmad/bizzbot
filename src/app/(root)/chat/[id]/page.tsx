@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import ChatMessage from "@/components/ChatMessage";
 import { getGreeting } from "@/lib/utils";
 import Loading from "@/components/loading";
+import Shortcut from "@/components/Shortcut";
 
 const SpeechRecognition =
   typeof window !== "undefined"
@@ -152,15 +153,16 @@ const ViewChat = () => {
       >
         <div className="flex items-center gap-2 px-2 mb-8">
           <Logo size="xs" className="cursor-pointer" />
-          <h1 className="text-3xl md:text-4xl font-bold text-neutral-300">
+          <h1 className="text-2xl md:text-4xl font-bold text-neutral-300">
             {greeting}
           </h1>
         </div>
+        <Shortcut />
       </div>
 
       <div
         id="message-container"
-        className="w-full flex max-w-[50vw] mx-auto flex-col overflow-y-auto flex-1 scrollbar-hide pb-36 pt-10"
+        className="w-full flex lg:max-w-[50vw] mx-auto flex-col overflow-y-auto flex-1 scrollbar-hide pb-36 pt-10"
       >
         {chatsLoading ? (
           <div className="flex-1 flex justify-center items-center">
@@ -182,7 +184,7 @@ const ViewChat = () => {
         className={`w-full max-w-[580px] mx-auto border-t border-x lg:fixed lg:-bottom-12 border-neutral-700 bg-neutral-800 lg:left-1/2 lg:-translate-1/3 rounded-t-2xl min-h-[100px] px-4 pt-2 pb-4`}
       >
         <div
-          hidden={!!input || isRecording}
+          hidden={!chatsLoading || messages.length <= 0}
           className="flex flex-wrap gap-2 text-xs items-center justify-center px-1 py-2"
         >
           {actions.map(({ icon: Icon, label, query }, i) => (

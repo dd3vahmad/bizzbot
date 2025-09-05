@@ -42,7 +42,7 @@ const ChatMessage = ({ message, isLoading, isLastMessage }: Props) => {
 
   return (
     <div
-      className={cn("flex items-start mb-4", {
+      className={cn("flex w-full items-start mb-4", {
         "justify-end": message.role === "user",
         "justify-start": message.role === "assistant",
       })}

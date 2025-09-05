@@ -12,6 +12,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Logo from "./logo";
 import Link from "next/link";
@@ -23,6 +24,7 @@ import { toast } from "sonner";
 import Loading from "./loading";
 
 export function AppSidebar() {
+  const { setOpenMobile } = useSidebar();
   const [isLoading, setIsLoading] = useState(true);
   const [chats, setChats] = useState<Omit<IChat, "created_at" | "user_id">[]>(
     []
@@ -84,9 +86,9 @@ export function AppSidebar() {
             <SidebarMenu>
               {isLoading ? (
                 <Loading />
-              ) : chats && chats.length ? (
+              ) : chats.length ? (
                 chats.map((item) => (
-                  <SidebarMenuItem key={item.id}>
+                  <SidebarMenuItem key={item.id} onClick={() => setOpenMobile(false)}>
                     <SidebarMenuButton
                       asChild
                       className="bg-neutral-700/30 focus:bg-neutral-700/30 rounded hover:bg-neutral-700/50 hover:text-neutral-300"
