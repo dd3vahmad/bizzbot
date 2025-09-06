@@ -45,7 +45,7 @@ const ViewChat = () => {
   } = useChat({
     api: "/api/messages",
     body: { chatId, user_id: userId },
-    initialMessages,
+    initialMessages: chatsLoading ? [] : initialMessages,
   });
 
   const startRecognition = () => {
@@ -125,9 +125,15 @@ const ViewChat = () => {
     const bootstrap = async () => {
       const prompt = sessionStorage.getItem("bizzbot_prompt");
       if (prompt) {
+        setChatsLoading(false);
         await append(
           { role: "user", content: prompt, createdAt: new Date() },
-          { body: { chatId } }
+          {
+            body: {
+              chatId,
+              user_id: userId,
+            }
+          }
         );
         sessionStorage.removeItem("bizzbot_prompt");
       } else {
@@ -135,12 +141,11 @@ const ViewChat = () => {
       }
     };
     bootstrap();
-  }, [chatId, append]);
+  }, [chatId]);
   const greeting = `${getGreeting()}, ${user?.firstName}`;
 
   return (
     <div className="flex flex-col h-screen w-full">
-      {/* Header */}
       <div className="border-b border-neutral-700/50 bg-neutral-800/50 py-4 px-8 flex items-center justify-between w-full">
         <h1 className="text-lg font-semibold text-neutral-100 line-clamp-1">
           {title}

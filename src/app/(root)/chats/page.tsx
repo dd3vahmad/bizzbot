@@ -17,7 +17,7 @@ export default function AllChatsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [chats, setChats] = useState<IChat[]>([]);
   const fetchChats = async () => {
-    setIsLoading(false)
+    setIsLoading(true)
     try {
       const res = await fetch(`/api/chat/all?q=${searchQuery}`, {
         method: "GET",
