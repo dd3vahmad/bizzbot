@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useParams } from "next/navigation";
 import Logo from "@/components/logo";
-import { Message, useChat } from "ai/react";
+import { Message, useChat } from "@ai-sdk/react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { actions } from "@/components/QuickActions";
 import { toast } from "sonner";

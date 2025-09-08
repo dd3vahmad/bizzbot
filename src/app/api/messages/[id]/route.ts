@@ -4,10 +4,10 @@ import createClient from "@/lib/supabase/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await params;
+    const { id } = params;
 
     const supabase = await createClient(req);
 
@@ -22,7 +22,8 @@ export async function GET(
     const { data: messages, error: msgError } = await supabase
       .from("messages")
       .select("*")
-      .eq("chat_id", id);
+      .eq("chat_id", id)
+      .order("created_at", { ascending: true });
 
     if (msgError) throw msgError;
 
